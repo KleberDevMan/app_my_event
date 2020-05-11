@@ -12,8 +12,12 @@ const url_programming =
     "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=1";
 
 Future<Map> getProgramming() async {
+  try{
   http.Response response = await http.get(url_programming);
   return json.decode(response.body);
+  } catch (e) {
+    print(e);
+  }
 }
 
 class PageProgramming extends StatefulWidget {

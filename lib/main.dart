@@ -29,10 +29,26 @@ class _HomeState extends State<Home> {
           title: AnimatedBuilder(
               animation: pageController,
               builder: (_, __) {
-                return Text(
-                  ['Informações', 'Programação'][indexPage]);
+                return Text(['Informações', 'Programação'][indexPage]);
               }),
           centerTitle: true,
+          leading: GestureDetector(
+            onTap: () {/* Write listener code here */},
+            child: Icon(
+              Icons.menu, // add custom icons also
+            ),
+          ),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.notifications,
+                    size: 26.0,
+                  ),
+                )),
+          ],
         ),
         body: PageView(controller: pageController, children: <Widget>[
           PageInfo(),
