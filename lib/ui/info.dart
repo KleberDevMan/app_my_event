@@ -68,8 +68,10 @@ class _PageInfoState extends State<PageInfo> {
                           padding: EdgeInsets.all(5.0),
                           child: Column(children: <Widget>[
                             Container(
-                              padding: EdgeInsets.only(top:10, right: 10, left:10),
+                              padding:
+                                  EdgeInsets.only(top: 10, right: 10, left: 10),
                               height: 500,
+                              width: MediaQuery.of(context).size.width,
                               child: Card(
                                 semanticContainer: true,
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -85,10 +87,31 @@ class _PageInfoState extends State<PageInfo> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         )),
-                                    Text(snapshot.data['data_inicio_s'],
-                                        style: TextStyle(fontSize: 18)),
-                                    Text(snapshot.data['local'],
-                                        style: TextStyle(fontSize: 18)),
+                                    Row(children: <Widget>[
+                                      Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.blue,
+                                        size: 20.0,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                            snapshot.data['data_inicio_s'],
+                                            style: TextStyle(fontSize: 18)),
+                                      )
+                                    ]),
+                                    Row(children: <Widget>[
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Colors.blue,
+                                        size: 20.0,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(snapshot.data['local'],
+                                            style: TextStyle(fontSize: 18)),
+                                      )
+                                    ]),
                                     Text(
                                       snapshot.data['descricao'],
                                       overflow: TextOverflow.ellipsis,
@@ -107,48 +130,120 @@ class _PageInfoState extends State<PageInfo> {
                                 margin: EdgeInsets.only(top: 5),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.only(top:10, right: 10, left:10),
-                              height: 450,
-                              child: Card(
-                                semanticContainer: true,
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Image.network(
-                                      url + snapshot.data['img_link'],
-                                      fit: BoxFit.fill,
-                                    ),
-                                    Text(snapshot.data['titulo'],
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    Text(snapshot.data['data_inicio_s'],
-                                        style: TextStyle(fontSize: 18)),
-                                    Text(snapshot.data['local'],
-                                        style: TextStyle(fontSize: 18)),
-                                    Text(
-                                      snapshot.data['descricao'],
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+                            if (snapshot.data['patrocinadores'].length > 0)
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 10, right: 10, left: 10),
+                                // height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: Card(
+                                  semanticContainer: true,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Patrocício',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      GridView.extent(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          maxCrossAxisExtent: 200,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 5,
+                                          padding: const EdgeInsets.all(5),
+                                          children: _buildGridTiles(
+                                              snapshot, 'patrocinadores'))
+                                    ],
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  elevation: 5,
+                                  margin: EdgeInsets.only(top: 5),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                elevation: 5,
-                                margin: EdgeInsets.only(top: 5),
                               ),
-                            ),
-
-
+                            if (snapshot.data['apoiadores'].length > 0)
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 10, right: 10, left: 10),
+                                // height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: Card(
+                                  semanticContainer: true,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Apoio',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      GridView.extent(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          maxCrossAxisExtent: 200,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 5,
+                                          padding: const EdgeInsets.all(5),
+                                          children: _buildGridTiles(
+                                              snapshot, 'apoiadores'))
+                                    ],
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  elevation: 5,
+                                  margin: EdgeInsets.only(top: 5),
+                                ),
+                              ),
+                            if (snapshot.data['organizadores'].length > 0)
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 10, right: 10, left: 10),
+                                // height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: Card(
+                                  semanticContainer: true,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Organização',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      GridView.extent(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          maxCrossAxisExtent: 200,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 5,
+                                          padding: const EdgeInsets.all(5),
+                                          children: _buildGridTiles(
+                                              snapshot, 'organizadores'))
+                                    ],
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  elevation: 5,
+                                  margin: EdgeInsets.only(top: 5),
+                                ),
+                              ),
                           ]),
                         );
                   }
@@ -157,28 +252,18 @@ class _PageInfoState extends State<PageInfo> {
     );
   }
 
-  setListCards(AsyncSnapshot snapshot) {
-    print(snapshot.data.runtimeType);
-  }
-
-  // Card de informacoes
-  Widget _cardEvent(BuildContext context, AsyncSnapshot snapshot) {
-    return Card(
-      color: Colors.black12,
-      child: Container(
-        padding: EdgeInsets.all(32.0),
-        child: Column(
-          children: <Widget>[
-            Image.network(
-                "https://flutter.io/images/catalog-widget-placeholder.png"),
-            Divider(),
-            Text(snapshot.data['titulo'])
-          ],
+  List<Widget> _buildGridTiles(AsyncSnapshot snapshot, String parceiros) {
+    List<Widget> containers =
+        List<Container>.generate(snapshot.data[parceiros].length, (int index) {
+      return Container(
+          child: ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: Image.network(
+          url + snapshot.data[parceiros][index]['img_link'],
+          fit: BoxFit.fill,
         ),
-      ),
-    );
+      ));
+    });
+    return containers;
   }
-
-  //Card Patrocinadores, Apoiadores, Organizadores
-  Widget _cardParceiros(BuildContext context, AsyncSnapshot snapshot) {}
 }
