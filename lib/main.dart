@@ -6,7 +6,10 @@ import 'package:my_event/ui/programming.dart';
 void main() {
   runApp(MaterialApp(
     home: Home(),
-    theme: ThemeData(brightness: Brightness.dark, primarySwatch: Colors.orange),
+    theme: ThemeData(
+      brightness: Brightness.dark, 
+      primarySwatch: Colors.orange,
+      fontFamily: 'Roboto'),
   ));
 }
 

@@ -26,13 +26,15 @@ class PageInfo extends StatefulWidget {
 }
 
 class _PageInfoState extends State<PageInfo> {
+  List _listCards = ['kleber', 'maria', 'ana'];
+
   @override
   void initState() {
     super.initState();
 
-    getEvento().then((map) {
-      print(map);
-    });
+    // getEvento().then((map) {
+    //   print(map);
+    // });
   }
 
   @override
@@ -62,22 +64,113 @@ class _PageInfoState extends State<PageInfo> {
                           textAlign: TextAlign.center,
                         ));
                       else
-                        return cardEvent(context, snapshot);
+                        return SingleChildScrollView(
+                          padding: EdgeInsets.all(5.0),
+                          child: Column(children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.only(top:10, right: 10, left:10),
+                              height: 500,
+                              child: Card(
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Image.network(
+                                      url + snapshot.data['img_link'],
+                                      fit: BoxFit.fill,
+                                    ),
+                                    Text(snapshot.data['titulo'],
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    Text(snapshot.data['data_inicio_s'],
+                                        style: TextStyle(fontSize: 18)),
+                                    Text(snapshot.data['local'],
+                                        style: TextStyle(fontSize: 18)),
+                                    Text(
+                                      snapshot.data['descricao'],
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                elevation: 5,
+                                margin: EdgeInsets.only(top: 5),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(top:10, right: 10, left:10),
+                              height: 450,
+                              child: Card(
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Image.network(
+                                      url + snapshot.data['img_link'],
+                                      fit: BoxFit.fill,
+                                    ),
+                                    Text(snapshot.data['titulo'],
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    Text(snapshot.data['data_inicio_s'],
+                                        style: TextStyle(fontSize: 18)),
+                                    Text(snapshot.data['local'],
+                                        style: TextStyle(fontSize: 18)),
+                                    Text(
+                                      snapshot.data['descricao'],
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                elevation: 5,
+                                margin: EdgeInsets.only(top: 5),
+                              ),
+                            ),
+
+
+                          ]),
+                        );
                   }
                 }))
       ],
     );
   }
 
+  setListCards(AsyncSnapshot snapshot) {
+    print(snapshot.data.runtimeType);
+  }
+
   // Card de informacoes
-  Widget cardEvent(BuildContext context, AsyncSnapshot snapshot) {
+  Widget _cardEvent(BuildContext context, AsyncSnapshot snapshot) {
     return Card(
       color: Colors.black12,
       child: Container(
         padding: EdgeInsets.all(32.0),
         child: Column(
           children: <Widget>[
-            Image.network("https://flutter.io/images/catalog-widget-placeholder.png"),
+            Image.network(
+                "https://flutter.io/images/catalog-widget-placeholder.png"),
             Divider(),
             Text(snapshot.data['titulo'])
           ],
@@ -87,5 +180,5 @@ class _PageInfoState extends State<PageInfo> {
   }
 
   //Card Patrocinadores, Apoiadores, Organizadores
-  Widget cardParceiros(BuildContext context, AsyncSnapshot snapshot) {}
+  Widget _cardParceiros(BuildContext context, AsyncSnapshot snapshot) {}
 }
