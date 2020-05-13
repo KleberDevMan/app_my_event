@@ -7,9 +7,9 @@ void main() {
   runApp(MaterialApp(
     home: Home(),
     theme: ThemeData(
-      brightness: Brightness.dark, 
-      primarySwatch: Colors.orange,
-      fontFamily: 'Roboto'),
+        brightness: Brightness.dark,
+        primarySwatch: Colors.orange,
+        fontFamily: 'Roboto'),
   ));
 }
 
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
               return BottomNavigationBar(
                   onTap: (index) {
                     pageController.animateToPage(index,
-                        duration: Duration(milliseconds: 300),
+                        duration: Duration(milliseconds: 80),
                         curve: Curves.easeInOut);
                   },
                   currentIndex: indexPage,
@@ -76,4 +76,31 @@ class _HomeState extends State<Home> {
             }) // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
+
+  // List<Widget> _listaWidgets(PageController controller) {
+  //   if (controller.page.round() == 0) {
+  //     return <Widget>[
+  //       Padding(
+  //           padding: EdgeInsets.only(right: 20.0),
+  //           child: GestureDetector(
+  //             onTap: () {},
+  //             child: Icon(
+  //               Icons.notifications,
+  //               size: 26.0,
+  //             ),
+  //           ))
+  //     ];
+  //   }
+  //   return <Widget>[
+  //     Padding(
+  //         padding: EdgeInsets.only(right: 20.0),
+  //         child: GestureDetector(
+  //           onTap: () {},
+  //           child: Icon(
+  //             Icons.filter,
+  //             size: 26.0,
+  //           ),
+  //         ))
+  //   ];
+  // }
 }

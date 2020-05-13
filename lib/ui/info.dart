@@ -26,20 +26,8 @@ class PageInfo extends StatefulWidget {
 }
 
 class _PageInfoState extends State<PageInfo> {
-  List _listCards = ['kleber', 'maria', 'ana'];
-
-  @override
-  void initState() {
-    super.initState();
-
-    // getEvento().then((map) {
-    //   print(map);
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // return Container(color: Colors.red);
     return Column(
       children: <Widget>[
         Expanded(
