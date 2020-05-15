@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -17,6 +15,7 @@ Future<Map> getEvento() async {
     return json.decode(response.body);
   } catch (error) {
     print(error);
+    return null;
   }
 }
 
@@ -119,119 +118,14 @@ class _PageInfoState extends State<PageInfo> {
                               ),
                             ),
                             if (snapshot.data['patrocinadores'].length > 0)
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 10, right: 10, left: 10),
-                                // height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: Card(
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('Patrocício',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      GridView.extent(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          maxCrossAxisExtent: 200,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                          padding: const EdgeInsets.all(5),
-                                          children: _buildGridTiles(
-                                              snapshot, 'patrocinadores'))
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  elevation: 5,
-                                  margin: EdgeInsets.only(top: 5),
-                                ),
-                              ),
+                              _cardPatrocinadores(
+                                  snapshot, 'Patrocício', 'patrocinadores'),
                             if (snapshot.data['apoiadores'].length > 0)
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 10, right: 10, left: 10),
-                                // height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: Card(
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('Apoio',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      GridView.extent(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          maxCrossAxisExtent: 200,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                          padding: const EdgeInsets.all(5),
-                                          children: _buildGridTiles(
-                                              snapshot, 'apoiadores'))
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  elevation: 5,
-                                  margin: EdgeInsets.only(top: 5),
-                                ),
-                              ),
+                              _cardPatrocinadores(
+                                  snapshot, 'Apoio', 'apoiadores'),
                             if (snapshot.data['organizadores'].length > 0)
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 10, right: 10, left: 10),
-                                // height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                child: Card(
-                                  semanticContainer: true,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('Organização',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      GridView.extent(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          maxCrossAxisExtent: 200,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                          padding: const EdgeInsets.all(5),
-                                          children: _buildGridTiles(
-                                              snapshot, 'organizadores'))
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  elevation: 5,
-                                  margin: EdgeInsets.only(top: 5),
-                                ),
-                              ),
+                              _cardPatrocinadores(
+                                  snapshot, 'Organização', 'organizadores')
                           ]),
                         );
                   }
@@ -253,5 +147,42 @@ class _PageInfoState extends State<PageInfo> {
       ));
     });
     return containers;
+  }
+
+  _cardPatrocinadores(
+      AsyncSnapshot snapshot, String parceiroTitle, String parceiroTipo) {
+    return Container(
+      padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+      // height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(parceiroTitle,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                )),
+            GridView.extent(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                maxCrossAxisExtent: 200,
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 5,
+                padding: const EdgeInsets.all(5),
+                children: _buildGridTiles(snapshot, parceiroTipo))
+          ],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        elevation: 5,
+        margin: EdgeInsets.only(top: 5),
+      ),
+    );
   }
 }
