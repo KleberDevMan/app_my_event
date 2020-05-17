@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:my_event/controllers/programmingController.dart';
 
 // Requisições HTTP para localhost:
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
@@ -26,6 +29,26 @@ class PageProgramming extends StatefulWidget {
 }
 
 class _PageProgrammingState extends State<PageProgramming> {
+  int _indexDias = 0;
+  List<dynamic> _dias = [];
+  bool nextDiaIsValid = true; 
+
+  _lastDia() {
+    setState(() {
+      programmingController.lastDia();
+      _indexDias--;
+    });
+  }
+
+  _nextDia() {
+    setState(() {
+      programmingController.nextDia();
+      _indexDias++;
+    });
+  }
+
+  final programmingController = ProgrammingController();
+
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -48,7 +71,7 @@ class _PageProgrammingState extends State<PageProgramming> {
     );
   }
 
-  _cardAtividade(BuildContext context, String data, Map atividade) {
+  _cardAtividade(BuildContext context, Map atividade, String data) {
     return GestureDetector(
         child: Container(
             padding: EdgeInsets.only(top: 10, right: 10, left: 10),
@@ -74,7 +97,7 @@ class _PageProgrammingState extends State<PageProgramming> {
                     Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(data, style: TextStyle(fontSize: 18)),
-                    )
+                    ),
                   ]),
                   Row(children: <Widget>[
                     Icon(
@@ -115,32 +138,29 @@ class _PageProgrammingState extends State<PageProgramming> {
         });
   }
 
-  _panelData(List dias) {
+  _panelData() {
     return Container(
       child: Card(
         child: Row(
           children: <Widget>[
             FlatButton(
-              onPressed: () {},
+              onPressed: _indexDias > 0 ? () => _lastDia() : null,
               child: Text(
                 "<",
               ),
             ),
             Expanded(
-                child: 
-                Text(
-              dias[0],
+                child: Text(
+              programmingController.dias[programmingController.indexDias],
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             )),
             FlatButton(
-              onPressed: () {
-                
-              },
+              onPressed: _dias.length > (_indexDias + 1) ? () => _nextDia() : null,
               child: Text(
                 ">",
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -173,15 +193,24 @@ class _PageProgrammingState extends State<PageProgramming> {
                           textAlign: TextAlign.center,
                         ));
                       else
-                        return SingleChildScrollView(
-                          padding: EdgeInsets.all(5.0),
-                          child: Column(children: <Widget>[
-                            _panelData(snapshot.data['dias'].map((d) => d['data']).toList()),
-                            for (var dia in snapshot.data['dias'])
-                              for (var atv in dia['atividades'])
-                                _cardAtividade(context, dia['data'], atv),
-                          ]),
-                        );
+                        // Atualiza a lista de dias
+                        _dias = (snapshot.data['dias']
+                            .map((d) => d['data'])
+                            .toList());
+                      programmingController.setDias(
+                          snapshot.data['dias'].map((d) => d['data']).toList());
+
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.all(5.0),
+                        child: Column(children: <Widget>[
+                          Observer(builder: (_) {
+                            return _panelData();
+                          }),
+                          for (var atv in snapshot.data['dias'][_indexDias]
+                              ['atividades'])
+                            _cardAtividade(context, atv, _dias[_indexDias]),
+                        ]),
+                      );
                   }
                 }))
       ],
