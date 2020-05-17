@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:my_event/controllers/eventoController.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -25,6 +27,8 @@ class PageInfo extends StatefulWidget {
 }
 
 class _PageInfoState extends State<PageInfo> {
+  final eventoController = GetIt.instance<EventoController>();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,11 +41,8 @@ class _PageInfoState extends State<PageInfo> {
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       return Center(
-                          child: Text(
-                        "Carregando Dados...",
-                        style: TextStyle(color: Colors.amber, fontSize: 25.0),
-                        textAlign: TextAlign.center,
-                      ));
+                        child: CircularProgressIndicator(),
+                      );
                     default:
                       if (snapshot.hasError || snapshot.data == null)
                         return Center(
@@ -132,6 +133,88 @@ class _PageInfoState extends State<PageInfo> {
                 }))
       ],
     );
+
+    // Observer(builder: (_) {
+    //    return SingleChildScrollView(
+    //                     padding: EdgeInsets.all(5.0),
+    //                     child: Column(children: <Widget>[
+    //                       Container(
+    //                         padding:
+    //                             EdgeInsets.only(top: 10, right: 10, left: 10),
+    //                         height: 500,
+    //                         width: MediaQuery.of(context).size.width,
+    //                         child: Card(
+    //                           semanticContainer: true,
+    //                           clipBehavior: Clip.antiAliasWithSaveLayer,
+    //                           child: Column(
+    //                             crossAxisAlignment: CrossAxisAlignment.start,
+    //                             children: <Widget>[
+    //                               Image.network(
+    //                                 url + eventoController.eventoData['img_link'],
+    //                                 fit: BoxFit.fill,
+    //                               ),
+    //                               Text(eventoController.eventoData['titulo'],
+    //                                   style: TextStyle(
+    //                                     fontSize: 20,
+    //                                     fontWeight: FontWeight.bold,
+    //                                   )),
+    //                               Row(children: <Widget>[
+    //                                 Icon(
+    //                                   Icons.calendar_today,
+    //                                   color: Colors.blue,
+    //                                   size: 20.0,
+    //                                 ),
+    //                                 Padding(
+    //                                   padding: EdgeInsets.only(left: 10),
+    //                                   child: Text(
+    //                                       eventoController.eventoData['data_inicio_s'],
+    //                                       style: TextStyle(fontSize: 18)),
+    //                                 )
+    //                               ]),
+    //                               Row(children: <Widget>[
+    //                                 Icon(
+    //                                   Icons.location_on,
+    //                                   color: Colors.blue,
+    //                                   size: 20.0,
+    //                                 ),
+    //                                 Padding(
+    //                                   padding: EdgeInsets.only(left: 10),
+    //                                   child: Text(eventoController.eventoData['local'],
+    //                                       style: TextStyle(fontSize: 18)),
+    //                                 )
+    //                               ]),
+    //                               Text(
+    //                                 eventoController.eventoData['descricao'],
+    //                                 overflow: TextOverflow.ellipsis,
+    //                                 style: TextStyle(
+    //                                   fontSize: 16.0,
+    //                                   fontFamily: 'Roboto',
+    //                                   color: Colors.white,
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                           shape: RoundedRectangleBorder(
+    //                             borderRadius: BorderRadius.circular(5.0),
+    //                           ),
+    //                           elevation: 5,
+    //                           margin: EdgeInsets.only(top: 5),
+    //                         ),
+    //                       ),
+    //                       // if (eventoController.eventoData['patrocinadores'].length > 0)
+    //                       //   _cardPatrocinadores(
+    //                       //       snapshot, 'Patrocício', 'patrocinadores'),
+    //                       // if (eventoController.eventoData['apoiadores'].length > 0)
+    //                       //   _cardPatrocinadores(
+    //                       //       snapshot, 'Apoio', 'apoiadores'),
+    //                       // if (eventoController.eventoData['organizadores'].length > 0)
+    //                       //   _cardPatrocinadores(
+    //                       //       snapshot, 'Organização', 'organizadores')
+    //                     ]),
+    //                   );
+
+    // },
+    // );
   }
 
   List<Widget> _buildGridTiles(AsyncSnapshot snapshot, String parceiros) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_event/ui/info.dart';
 import 'package:my_event/ui/programming.dart';
+import 'package:my_event/controllers/eventoController.dart';
 
 class MenuBottom extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class MenuBottom extends StatefulWidget {
 
 class _MenuBottomState extends State<MenuBottom> {
   final pageController = PageController();
+  final eventoController = GetIt.instance<EventoController>();
 
   // se pagina for nula, retorno 0
   int get indexPage => pageController?.page?.round() ?? 0;

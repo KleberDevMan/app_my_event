@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:my_event/controllers/eventoController.dart';
 
 import 'package:my_event/controllers/programmingController.dart';
 
@@ -11,11 +13,11 @@ import 'package:my_event/controllers/programmingController.dart';
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
 const url = 'http://10.0.2.2:3000';
 const url_programming =
-    "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=1";
+    "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=";
 
-Future<Map> getProgramming() async {
+Future<Map> getProgramming(int id) async {
   try {
-    http.Response response = await http.get(url_programming);
+    http.Response response = await http.get(url_programming + "$id");
     return json.decode(response.body);
   } catch (e) {
     print(e);
@@ -33,6 +35,9 @@ class _PageProgrammingState extends State<PageProgramming> {
   List<dynamic> _dias = [];
   bool nextDiaIsValid = true; 
 
+  final programmingController = ProgrammingController();
+  final eventoController = GetIt.instance<EventoController>();
+
   _lastDia() {
     setState(() {
       programmingController.lastDia();
@@ -47,7 +52,7 @@ class _PageProgrammingState extends State<PageProgramming> {
     });
   }
 
-  final programmingController = ProgrammingController();
+  
 
   _showDialog(BuildContext context) {
     showDialog(
@@ -169,21 +174,20 @@ class _PageProgrammingState extends State<PageProgramming> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return 
+    
+    Column(
       children: <Widget>[
         Expanded(
             child: FutureBuilder<Map>(
-                future: getProgramming(),
+                future: getProgramming(eventoController.eventoData['id']),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       return Center(
-                          child: Text(
-                        "Carregando Dados...",
-                        style: TextStyle(color: Colors.amber, fontSize: 25.0),
-                        textAlign: TextAlign.center,
-                      ));
+                        child: CircularProgressIndicator(),
+                      );
                     default:
                       if (snapshot.hasError || snapshot.data == null)
                         return Center(

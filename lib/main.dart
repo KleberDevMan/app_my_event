@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_event/menu_bottom.dart';
+import 'package:my_event/controllers/eventoController.dart';
 import 'package:my_event/ui/code_event.dart';
-// import 'package:my_event/ui/info.dart';
-// import 'package:my_event/ui/programming.dart';
+import 'package:get_it/get_it.dart';
+
+final getIt = GetIt.instance;
 
 // todo projeto inicia aqui, no main
 void main() {
+  getIt.registerSingleton<EventoController>(EventoController());
+
   runApp(MaterialApp(
     home: Home(),
     theme: ThemeData(
