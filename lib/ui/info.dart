@@ -11,7 +11,7 @@ import 'dart:convert';
 const url = 'http://10.0.2.2:3000';
 const url_evento = "http://10.0.2.2:3000/users_backoffice/eventos/evento?id=1";
 
-Future<Map> getEvento() async {
+Future<Map> _getEvento() async {
   try {
     http.Response response = await http.get(url_evento);
     return json.decode(response.body);
@@ -35,7 +35,7 @@ class _PageInfoState extends State<PageInfo> {
       children: <Widget>[
         Expanded(
             child: FutureBuilder<Map>(
-                future: getEvento(),
+                future: _getEvento(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:

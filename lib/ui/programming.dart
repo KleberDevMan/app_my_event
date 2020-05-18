@@ -15,7 +15,7 @@ const url = 'http://10.0.2.2:3000';
 const url_programming =
     "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=";
 
-Future<Map> getProgramming(int id) async {
+Future<Map> _buscarProgramacao(int id) async {
   try {
     http.Response response = await http.get(url_programming + "$id");
     return json.decode(response.body);
@@ -33,7 +33,7 @@ class PageProgramming extends StatefulWidget {
 class _PageProgrammingState extends State<PageProgramming> {
   int _indexDias = 0;
   List<dynamic> _dias = [];
-  bool nextDiaIsValid = true; 
+  bool nextDiaIsValid = true;
 
   final programmingController = ProgrammingController();
   final eventoController = GetIt.instance<EventoController>();
@@ -51,8 +51,6 @@ class _PageProgrammingState extends State<PageProgramming> {
       _indexDias++;
     });
   }
-
-  
 
   _showDialog(BuildContext context) {
     showDialog(
@@ -116,23 +114,38 @@ class _PageProgrammingState extends State<PageProgramming> {
                           style: TextStyle(fontSize: 18)),
                     )
                   ]),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(atividade['titulo'],
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       )),
-                  Text(atividade['descricao'], style: TextStyle(fontSize: 18)),
+                  Text(atividade['descricao'],
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 18)),
                   Row(children: <Widget>[
                     Icon(
                       Icons.location_on,
                       color: Colors.blue,
                       size: 20.0,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(atividade['local'],
-                          style: TextStyle(fontSize: 18)),
-                    )
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Flexible(
+                      child: Container(
+                        padding: new EdgeInsets.only(left: 10),
+                        child: new Text(
+                          atividade['local'],
+                          overflow: TextOverflow.ellipsis,
+                          style: new TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ),
                   ]),
                 ],
               ),
@@ -161,7 +174,8 @@ class _PageProgrammingState extends State<PageProgramming> {
               textAlign: TextAlign.center,
             )),
             FlatButton(
-              onPressed: _dias.length > (_indexDias + 1) ? () => _nextDia() : null,
+              onPressed:
+                  _dias.length > (_indexDias + 1) ? () => _nextDia() : null,
               child: Text(
                 ">",
               ),
@@ -174,50 +188,55 @@ class _PageProgrammingState extends State<PageProgramming> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    
-    Column(
-      children: <Widget>[
-        Expanded(
-            child: FutureBuilder<Map>(
-                future: getProgramming(eventoController.eventoData['id']),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    default:
-                      if (snapshot.hasError || snapshot.data == null)
-                        return Center(
-                            child: Text(
-                          "Erro ao Carregar Dados :(",
-                          style: TextStyle(color: Colors.amber, fontSize: 25.0),
-                          textAlign: TextAlign.center,
-                        ));
-                      else
-                        // Atualiza a lista de dias
-                        _dias = (snapshot.data['dias']
-                            .map((d) => d['data'])
-                            .toList());
-                      programmingController.setDias(
-                          snapshot.data['dias'].map((d) => d['data']).toList());
+    return Observer(
+      builder: (_) {
+        return Column(
+          children: <Widget>[
+            Expanded(
+                child: FutureBuilder<Map>(
+                    future:
+                        _buscarProgramacao(eventoController.eventoData['id']),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        default:
+                          if (snapshot.hasError || snapshot.data == null)
+                            return Center(
+                                child: Text(
+                              "Erro ao Carregar Dados :(",
+                              style: TextStyle(
+                                  color: Colors.amber, fontSize: 25.0),
+                              textAlign: TextAlign.center,
+                            ));
+                          else
+                            // Atualiza a lista de dias
+                            _dias = (snapshot.data['dias']
+                                .map((d) => d['data'])
+                                .toList());
+                          programmingController.setDias(snapshot.data['dias']
+                              .map((d) => d['data'])
+                              .toList());
 
-                      return SingleChildScrollView(
-                        padding: EdgeInsets.all(5.0),
-                        child: Column(children: <Widget>[
-                          Observer(builder: (_) {
-                            return _panelData();
-                          }),
-                          for (var atv in snapshot.data['dias'][_indexDias]
-                              ['atividades'])
-                            _cardAtividade(context, atv, _dias[_indexDias]),
-                        ]),
-                      );
-                  }
-                }))
-      ],
+                          return SingleChildScrollView(
+                            padding: EdgeInsets.all(5.0),
+                            child: Column(children: <Widget>[
+                              Observer(builder: (_) {
+                                return _panelData();
+                              }),
+                              for (var atv in snapshot.data['dias'][_indexDias]
+                                  ['atividades'])
+                                _cardAtividade(context, atv, _dias[_indexDias]),
+                            ]),
+                          );
+                      }
+                    }))
+          ],
+        );
+      },
     );
   }
 }

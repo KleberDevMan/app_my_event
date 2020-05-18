@@ -68,7 +68,7 @@ class _CodeEventState extends State<CodeEvent> {
                           ),
                           if (eventoController.codeIsValid != null &&
                               eventoController.codeIsValid == false)
-                            Text('Código inválido',
+                            Text('Erro ao Carregar Dados :(',
                                 textAlign: TextAlign.center,
                                 style:
                                     TextStyle(fontSize: 16, color: Colors.red)),

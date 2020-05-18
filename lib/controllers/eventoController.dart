@@ -9,10 +9,11 @@ part 'eventoController.g.dart';
 class EventoController = _EventoControllerBase with _$EventoController;
 
 abstract class _EventoControllerBase with Store {
-  final url_event_code =
-      "http://10.0.2.2:3000/users_backoffice/eventos/evento?code=";
+  static String url = "http://10.0.2.2:3000";
 
-  // String url_programacao = "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=";
+  String url_event_code = url + "/users_backoffice/eventos/evento?code=";
+
+  String url_programacao = url + "/users_backoffice/eventos/programacao?id=";
 
   @observable
   Map<String, dynamic> eventoData = null;
@@ -47,19 +48,27 @@ abstract class _EventoControllerBase with Store {
   //   return programacaoEvento.map((d) => d['data']).toList();
   // }
 
-  // @action
-  // buscarProgramacao() async {
-  //   isLoading = true;
+  @action
+  buscarProgramacao() async {
+    // isLoading = true;
 
-  //   try {
-  //     http.Response response = await http.get(url_programacao + eventoData['id']);
-  //     programacaoEvento = json.decode(response.body);
-  //   } catch (e) {
-  //     print(e);
-  //   }
+    // try {
+    //   http.Response response = await http.get(url_programacao + "${eventoData['id']}");
+    //   programacaoEvento = json.decode(response.body);
+    // } catch (e) {
+    //   codeIsValid = false;
+    //   print(e);
+    // }
 
-  //   isLoading = false;
-  // }
+    try {
+      http.Response response =
+          await http.get(url_programacao + "${eventoData['id']}");
+      return json.decode(response.body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
 
-
+    // isLoading = false;
+  }
 }
