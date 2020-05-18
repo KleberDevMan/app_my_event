@@ -79,6 +79,14 @@ mixin _$EventoController on _EventoControllerBase, Store {
         .run(() => super.buscarEventoPorCodigo(value));
   }
 
+  final _$buscarProgramacaoAsyncAction =
+      AsyncAction('_EventoControllerBase.buscarProgramacao');
+
+  @override
+  Future buscarProgramacao() {
+    return _$buscarProgramacaoAsyncAction.run(() => super.buscarProgramacao());
+  }
+
   @override
   String toString() {
     return '''

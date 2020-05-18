@@ -75,31 +75,86 @@ class _PageInfoState extends State<PageInfo> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         )),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Row(children: <Widget>[
-                                      Icon(
-                                        Icons.calendar_today,
-                                        color: Colors.blue,
-                                        size: 20.0,
+                                      Column(
+                                        children: <Widget>[
+                                          Row(children: <Widget>[
+                                            Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.blue,
+                                              size: 20.0,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                  snapshot
+                                                      .data['data_inicio_s'],
+                                                  style:
+                                                      TextStyle(fontSize: 18)),
+                                            )
+                                          ]),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(children: <Widget>[
+                                            Icon(
+                                              Icons.location_on,
+                                              color: Colors.blue,
+                                              size: 20.0,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                  snapshot.data['local'],
+                                                  style:
+                                                      TextStyle(fontSize: 18)),
+                                            )
+                                          ]),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                            snapshot.data['data_inicio_s'],
-                                            style: TextStyle(fontSize: 18)),
+
+                                      // Column(children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 30, right: 10),
+                                          child: RaisedButton(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                  size: 20.0,
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                  "Inscrever-se",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                            color: Colors.green[800],
+                                            onPressed: () {
+                                              print('click...');
+                                            },
+                                          ),
+                                        ),
                                       )
+
+                                      // ]),
                                     ]),
-                                    Row(children: <Widget>[
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Colors.blue,
-                                        size: 20.0,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(snapshot.data['local'],
-                                            style: TextStyle(fontSize: 18)),
-                                      )
-                                    ]),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
                                     Text(
                                       snapshot.data['descricao'],
                                       overflow: TextOverflow.ellipsis,
