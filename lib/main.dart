@@ -12,7 +12,7 @@ void main() {
   runApp(MaterialApp(
     home: Home(),
     theme: ThemeData(
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         primarySwatch: Colors.orange,
         fontFamily: 'Roboto'),
   ));
