@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
-import 'package:my_event/controllers/pageControllerMobx.dart';
+// import 'package:flutter_mobx/flutter_mobx.dart';
+// import 'package:get_it/get_it.dart';
+// import 'package:my_event/controllers/pageControllerMobx.dart';
 import 'package:my_event/ui/info.dart';
 import 'package:my_event/ui/programming.dart';
-import 'package:my_event/controllers/eventoController.dart';
+// import 'package:my_event/controllers/eventoController.dart';
 
 class MenuBottom extends StatefulWidget {
   @override
@@ -31,7 +31,6 @@ class _MenuBottomState extends State<MenuBottom> {
 
     super.dispose();
   }
-
 
   // se pagina for nula, retorno 0
   // int get indexPage => pageController?.page?.round() ?? 0;
@@ -102,25 +101,57 @@ class _MenuBottomState extends State<MenuBottom> {
         //     );
 
         Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.grey[800],
+          //Usando um widget de bilder para aceitar gestor de estados pageController
+          title: AnimatedBuilder(
+              animation: _pageController,
+              builder: (_, __) {
+                return Text(['Informações', 'Programação'][_page]);
+              }),
+          centerTitle: true,
+          leading: GestureDetector(
+            onTap: () {/* Write listener code here */},
+            child: Icon(
+              Icons.menu, // add custom icons also
+            ),
+          ),
+          actions: <Widget>[
+            _page == 0
+                ? Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.notifications,
+                        size: 26.0,
+                      ),
+                    ))
+                : Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.tune,
+                        size: 26.0,
+                      ),
+                    )),
+          ]),
+      backgroundColor: Colors.grey[850],
       bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
-            canvasColor: Colors.grey[800],
-            // splashColor: Colors.yellowAccent,
-            // splashColor: Colors.yellowAccent,
-            // unselectedWidgetColor: Colors.green,
-            primaryColor: Colors.red,
-            // primaryColorDark: Colors.red,
+            primaryColor: Colors.white,
             textTheme: Theme.of(context).textTheme.copyWith(
-                  caption: TextStyle(color: Colors.green[800]),
-                  button: TextStyle(color: Colors.green[800]),
+                  caption: TextStyle(color: Colors.white70),
                 ),
           ),
           child: BottomNavigationBar(
+              backgroundColor: Colors.grey[850],
               currentIndex: _page,
               onTap: (p) {
-                _pageController.animateToPage(p, 
-                duration: Duration(milliseconds: 500), 
-                curve: Curves.ease);
+                _pageController.animateToPage(p,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut);
               },
               items: [
                 BottomNavigationBarItem(
@@ -129,16 +160,16 @@ class _MenuBottomState extends State<MenuBottom> {
                     icon: Icon(Icons.timeline), title: Text('Programação')),
               ])),
       body: PageView(
+        controller: _pageController,
         onPageChanged: (p) {
           setState(() {
             _page = p;
           });
         },
         children: <Widget>[
-          Container(color: Colors.yellow),
-          Container(color: Colors.grey),
-          
-          ],
+          PageInfo(),
+              PageProgramming(),
+        ],
       ),
     );
   }

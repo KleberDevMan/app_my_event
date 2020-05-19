@@ -56,6 +56,7 @@ class _PageInfoState extends State<PageInfo> {
                           padding: EdgeInsets.all(5.0),
                           child: Column(children: <Widget>[
                             Container(
+                              // backgroundColor: Colors.grey[800]
                               padding:
                                   EdgeInsets.only(top: 10, right: 10, left: 10),
                               height: 500,

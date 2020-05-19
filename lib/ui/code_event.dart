@@ -54,10 +54,13 @@ class _CodeEventState extends State<CodeEvent> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Text('MY EVENT', textAlign: TextAlign.center),
+                          Text('MY EVENT',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white70)),
                           Text('v 1.0',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12)),
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.white70)),
                           SizedBox(
                             height: 32,
                           ),
@@ -72,24 +75,31 @@ class _CodeEventState extends State<CodeEvent> {
                                 textAlign: TextAlign.center,
                                 style:
                                     TextStyle(fontSize: 16, color: Colors.red)),
-                          TextFormField(
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                    borderSide:
-                                        new BorderSide(color: Colors.teal)),
-                                hintText: 'Código',
-                                labelStyle: TextStyle(color: Colors.green),
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.green, fontSize: 25.0),
-                              controller: codeController,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Insira um código!";
-                                }
-                              }),
+                          Theme(
+                            data: new ThemeData(
+                              primaryColor: Colors.green[800],
+                            ),
+                            child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                      borderSide: new BorderSide(
+                                          color: Colors.green[800])),
+                                  hintText: 'Código',
+                                  hintStyle: TextStyle(color: Colors.white70),
+                                  labelStyle:
+                                      TextStyle(color: Colors.green[800]),
+                                ),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.green[800], fontSize: 25.0),
+                                controller: codeController,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Insira um código!";
+                                  }
+                                }),
+                          ),
                           SizedBox(
                             height: 32,
                           ),

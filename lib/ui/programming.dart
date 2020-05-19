@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,7 @@ import 'dart:convert';
 import 'package:my_event/controllers/eventoController.dart';
 
 import 'package:my_event/controllers/programmingController.dart';
+import 'package:my_event/ui/info_atividade_dialog.dart';
 
 // Requisições HTTP para localhost:
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
@@ -50,28 +52,6 @@ class _PageProgrammingState extends State<PageProgramming> {
       programmingController.nextDia();
       _indexDias++;
     });
-  }
-
-  _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Alert Dialog title"),
-          content: Text("Alert Dialog body"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            FlatButton(
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   _cardAtividade(BuildContext context, Map atividade, String data) {
@@ -150,9 +130,10 @@ class _PageProgrammingState extends State<PageProgramming> {
                 ],
               ),
             )),
+        
         onTap: () {
-          // popup informations activity
-          _showDialog(context);
+          // _showDialog(context);
+          _showTestDialog(context, atividade, data);
         });
   }
 
@@ -185,6 +166,153 @@ class _PageProgrammingState extends State<PageProgramming> {
       ),
     );
   }
+
+
+
+void _showTestDialog(BuildContext context, Map atividade, String data) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        //context: _scaffoldKey.currentContext,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.only(top: 10, left: 25, right: 25),
+            // title: Center(child: Text("Information")),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            content: Container(
+              height: 500,
+              width: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                Row(children: <Widget>[
+                  Icon(
+                    Icons.calendar_today,
+                    color: Colors.blue,
+                    size: 20.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(data, style: TextStyle(fontSize: 18)),
+                  ),
+                ]),
+                Row(children: <Widget>[
+                  Icon(
+                    Icons.access_time,
+                    color: Colors.blue,
+                    size: 20.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(atividade['hora'],
+                        style: TextStyle(fontSize: 18)),
+                  )
+                ]),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(atividade['titulo'],
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                    atividade['descricao'],
+                    // overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 18)),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(children: <Widget>[
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.blue,
+                    size: 20.0,
+                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  // ),
+                  Flexible(
+                    child: Container(
+                      padding: new EdgeInsets.only(left: 10),
+                      child: new Text(
+                        atividade['local'],
+                        // overflow: TextOverflow.ellipsis,
+                        style: new TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+              ],
+            
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.20,
+                    child: RaisedButton(
+                      child: new Text(
+                        'Fechar',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color:  Color(0xFF121A21),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0),
+                      ),
+                      onPressed: () {
+                        //saveIssue();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.01,
+                  ),
+                  
+                  Padding(
+                    padding: const EdgeInsets.only(right: 70.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      child: RaisedButton(
+                        child: new Text(
+                          'Inscrever-se',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Colors.blue[800],
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.height * 0.02,
+                  // ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -239,4 +367,6 @@ class _PageProgrammingState extends State<PageProgramming> {
       },
     );
   }
+
+
 }
