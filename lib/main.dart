@@ -11,10 +11,12 @@ void main() {
 
   runApp(MaterialApp(
     home: Home(),
+    debugShowCheckedModeBanner: false,
     theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
         fontFamily: 'Roboto'),
+  
   ));
 }
 

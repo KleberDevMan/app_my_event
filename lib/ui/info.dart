@@ -9,11 +9,12 @@ import 'dart:convert';
 // Requisições HTTP para localhost:
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
 const url = 'http://10.0.2.2:3000';
-const url_evento = "http://10.0.2.2:3000/users_backoffice/eventos/evento?id=1";
+const url_production = "https://tranquil-earth-03232.herokuapp.com";
+const url_evento = url_production + "/users_backoffice/eventos/evento?id=";
 
-Future<Map> _getEvento() async {
+Future<Map> _getEvento(int id) async {
   try {
-    http.Response response = await http.get(url_evento);
+    http.Response response = await http.get(url_evento + "$id");
     return json.decode(response.body);
   } catch (error) {
     print(error);
@@ -35,7 +36,7 @@ class _PageInfoState extends State<PageInfo> {
       children: <Widget>[
         Expanded(
             child: FutureBuilder<Map>(
-                future: _getEvento(),
+                future: _getEvento(eventoController.eventoData['id']),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -68,7 +69,7 @@ class _PageInfoState extends State<PageInfo> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Image.network(
-                                      url + snapshot.data['img_link'],
+                                      url_production + snapshot.data['img_link'],
                                       fit: BoxFit.fill,
                                     ),
                                     Text(snapshot.data['titulo'],
@@ -280,7 +281,7 @@ class _PageInfoState extends State<PageInfo> {
           child: ClipRRect(
         borderRadius: BorderRadius.circular(50),
         child: Image.network(
-          url + snapshot.data[parceiros][index]['img_link'],
+          url_production + snapshot.data[parceiros][index]['img_link'],
           fit: BoxFit.fill,
         ),
       ));

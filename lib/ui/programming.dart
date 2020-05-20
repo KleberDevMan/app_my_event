@@ -9,13 +9,13 @@ import 'dart:convert';
 import 'package:my_event/controllers/eventoController.dart';
 
 import 'package:my_event/controllers/programmingController.dart';
-import 'package:my_event/ui/info_atividade_dialog.dart';
 
 // Requisições HTTP para localhost:
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
 const url = 'http://10.0.2.2:3000';
+const url_production = "https://tranquil-earth-03232.herokuapp.com";
 const url_programming =
-    "http://10.0.2.2:3000/users_backoffice/eventos/programacao?id=";
+    url_production + "/users_backoffice/eventos/programacao?id=";
 
 Future<Map> _buscarProgramacao(int id) async {
   try {
@@ -130,7 +130,6 @@ class _PageProgrammingState extends State<PageProgramming> {
                 ],
               ),
             )),
-        
         onTap: () {
           // _showDialog(context);
           _showTestDialog(context, atividade, data);
@@ -167,9 +166,7 @@ class _PageProgrammingState extends State<PageProgramming> {
     );
   }
 
-
-
-void _showTestDialog(BuildContext context, Map atividade, String data) {
+  void _showTestDialog(BuildContext context, Map atividade, String data) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -187,71 +184,69 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                Row(children: <Widget>[
-                  Icon(
-                    Icons.calendar_today,
-                    color: Colors.blue,
-                    size: 20.0,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(data, style: TextStyle(fontSize: 18)),
-                  ),
-                ]),
-                Row(children: <Widget>[
-                  Icon(
-                    Icons.access_time,
-                    color: Colors.blue,
-                    size: 20.0,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(atividade['hora'],
-                        style: TextStyle(fontSize: 18)),
-                  )
-                ]),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(atividade['titulo'],
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    )),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                    atividade['descricao'],
-                    // overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 18)),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(children: <Widget>[
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.blue,
-                    size: 20.0,
-                  ),
-                  // SizedBox(
-                  //   height: 50,
-                  // ),
-                  Flexible(
-                    child: Container(
-                      padding: new EdgeInsets.only(left: 10),
-                      child: new Text(
-                        atividade['local'],
+                    Row(children: <Widget>[
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue,
+                        size: 20.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(data, style: TextStyle(fontSize: 18)),
+                      ),
+                    ]),
+                    Row(children: <Widget>[
+                      Icon(
+                        Icons.access_time,
+                        color: Colors.blue,
+                        size: 20.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(atividade['hora'],
+                            style: TextStyle(fontSize: 18)),
+                      )
+                    ]),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(atividade['titulo'],
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(atividade['descricao'],
                         // overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
-                          fontSize: 18.0,
+                        style: TextStyle(fontSize: 18)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.blue,
+                        size: 20.0,
+                      ),
+                      // SizedBox(
+                      //   height: 50,
+                      // ),
+                      Flexible(
+                        child: Container(
+                          padding: new EdgeInsets.only(left: 10),
+                          child: new Text(
+                            atividade['local'],
+                            // overflow: TextOverflow.ellipsis,
+                            style: new TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ]),
-              ],
-            
+                    ]),
+                  ],
                 ),
               ),
             ),
@@ -259,7 +254,6 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  
                   Container(
                     width: MediaQuery.of(context).size.width * 0.20,
                     child: RaisedButton(
@@ -267,7 +261,7 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
                         'Fechar',
                         style: TextStyle(color: Colors.white),
                       ),
-                      color:  Color(0xFF121A21),
+                      color: Color(0xFF121A21),
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0),
                       ),
@@ -277,11 +271,11 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
                       },
                     ),
                   ),
-                  
+
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  
+
                   Padding(
                     padding: const EdgeInsets.only(right: 70.0),
                     child: Container(
@@ -311,8 +305,6 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
           );
         });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -367,6 +359,4 @@ void _showTestDialog(BuildContext context, Map atividade, String data) {
       },
     );
   }
-
-
 }

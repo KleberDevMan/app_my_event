@@ -9,11 +9,14 @@ part 'eventoController.g.dart';
 class EventoController = _EventoControllerBase with _$EventoController;
 
 abstract class _EventoControllerBase with Store {
-  static String url = "http://10.0.2.2:3000";
+  // static String url = "http://10.0.2.2:3000";
+  static String url_production = "https://tranquil-earth-03232.herokuapp.com";
 
-  String url_event_code = url + "/users_backoffice/eventos/evento?code=";
+  String url_event_code =
+      url_production + "/users_backoffice/eventos/evento?code=";
 
-  String url_programacao = url + "/users_backoffice/eventos/programacao?id=";
+  String url_programacao =
+      url_production + "/users_backoffice/eventos/programacao?id=";
 
   @observable
   Map<String, dynamic> eventoData = null;
@@ -33,8 +36,12 @@ abstract class _EventoControllerBase with Store {
 
     try {
       http.Response response = await http.get(url_event_code + value);
-      codeIsValid = true;
-      eventoData = json.decode(response.body);
+      if (response.statusCode != 500) {
+        codeIsValid = true;
+        eventoData = json.decode(response.body);
+      }else{
+        codeIsValid = false;
+      }
     } catch (e) {
       codeIsValid = false;
       print(e);
