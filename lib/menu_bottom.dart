@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:my_event/controllers/pageControllerMobx.dart';
 import 'package:my_event/ui/info.dart';
 import 'package:my_event/ui/programming.dart';
+import 'package:my_event/widgets/custom_drawer.dart';
 // import 'package:my_event/controllers/eventoController.dart';
 
 class MenuBottom extends StatefulWidget {
@@ -110,12 +111,12 @@ class _MenuBottomState extends State<MenuBottom> {
                 return Text(['Informações', 'Programação'][_page]);
               }),
           centerTitle: true,
-          leading: GestureDetector(
-            onTap: () {/* Write listener code here */},
-            child: Icon(
-              Icons.menu, // add custom icons also
-            ),
-          ),
+          // leading: GestureDetector(
+          //   onTap: () {/* Write listener code here */},
+          //   child: Icon(
+          //     Icons.menu, // add custom icons also
+          //   ),
+          // ),
           actions: <Widget>[
             _page == 0
                 ? Padding(
@@ -171,6 +172,7 @@ class _MenuBottomState extends State<MenuBottom> {
               PageProgramming(),
         ],
       ),
+      drawer: CustomDrawer(),
     );
   }
 }
