@@ -1,62 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_event/controllersOld/eventoController.dart';
+import 'package:my_event/repositories/evento_repository.dart';
+import 'package:my_event/stores/evento_store.dart';
 
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
+class InformacoesTab extends StatelessWidget {
 
-// Requisições HTTP para localhost:
-// Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion
-const url = 'http://10.0.2.2:3000';
-const url_production = "https://tranquil-earth-03232.herokuapp.com";
-const url_evento = url_production + "/users_backoffice/eventos/evento?id=";
+  final _eventoStore = GetIt.instance<EventoStore>();
 
-Future<Map> _getEvento(int id) async {
-  try {
-    http.Response response = await http.get(url_evento + "$id");
-    return json.decode(response.body);
-  } catch (error) {
-    print(error);
-    return null;
+  Widget _backgroundGradient() => Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.grey[700], Colors.black38],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)),
+      );
+
+    _cardPatrocinadores(
+      AsyncSnapshot snapshot, String parceiroTitle, String parceiroTipo) {
+    return Container(
+      padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+      // height: MediaQuery.of(context).size.height,
+      // width: MediaQuery.of(context).size.width,
+      child: Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(parceiroTitle,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                )),
+            GridView.extent(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                maxCrossAxisExtent: 200,
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 5,
+                padding: const EdgeInsets.all(5),
+                children: _buildGridTiles(snapshot, parceiroTipo))
+          ],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        elevation: 5,
+        margin: EdgeInsets.only(top: 5),
+      ),
+    );
   }
-}
 
-class PageInfo extends StatefulWidget {
-  @override
-  _PageInfoState createState() => _PageInfoState();
-}
+  List<Widget> _buildGridTiles(String tipo_parceiro) {
+    switch (tipo_parceiro) {
+      case 'patrocinador':
+      case 'apoiador':
+      case 'organizador':
+    }
+    List<Widget> containers =
+        List<Container>.generate(_eventoStore.evento.patrocinadores.length, (int index) {
+      return Container(
+          child: ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: Image.network(
+          EventoRepository.url_production + _eventoStore.evento.img_link,
+          fit: BoxFit.fill,
+        ),
+      ));
+    });
+    return containers;
+  }
 
-class _PageInfoState extends State<PageInfo> {
-  final eventoController = GetIt.instance<EventoController>();
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Expanded(
-            child: FutureBuilder<Map>(
-                future: _getEvento(eventoController.eventoData['id']),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    default:
-                      if (snapshot.hasError || snapshot.data == null)
-                        return Center(
-                            child: Text(
-                          "Erro ao Carregar Dados :(",
-                          style: TextStyle(color: Colors.amber, fontSize: 25.0),
-                          textAlign: TextAlign.center,
-                        ));
-                      else
-                        return 
-                        
-                        
-                        SingleChildScrollView(
+        _backgroundGradient(),
+        SingleChildScrollView(
                           padding: EdgeInsets.all(5.0),
                           child: Column(children: <Widget>[
                             Container(
@@ -72,10 +97,10 @@ class _PageInfoState extends State<PageInfo> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Image.network(
-                                      url_production + snapshot.data['img_link'],
+                                      EventoRepository.url_production + _eventoStore.evento.img_link,
                                       fit: BoxFit.fill,
                                     ),
-                                    Text(snapshot.data['titulo'],
+                                    Text(_eventoStore.evento.titulo,
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -96,8 +121,7 @@ class _PageInfoState extends State<PageInfo> {
                                               padding:
                                                   EdgeInsets.only(left: 10),
                                               child: Text(
-                                                  snapshot
-                                                      .data['data_inicio_s'],
+                                                  _eventoStore.evento.data_inicio,
                                                   style:
                                                       TextStyle(fontSize: 18)),
                                             )
@@ -115,7 +139,7 @@ class _PageInfoState extends State<PageInfo> {
                                               padding:
                                                   EdgeInsets.only(left: 10),
                                               child: Text(
-                                                  snapshot.data['local'],
+                                                  _eventoStore.evento.local,
                                                   style:
                                                       TextStyle(fontSize: 18)),
                                             )
@@ -161,7 +185,7 @@ class _PageInfoState extends State<PageInfo> {
                                       height: 15,
                                     ),
                                     Text(
-                                      snapshot.data['descricao'],
+                                      _eventoStore.evento.descricao,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 16.0,
@@ -181,75 +205,16 @@ class _PageInfoState extends State<PageInfo> {
                             if (snapshot.data['patrocinadores'].length > 0)
                               _cardPatrocinadores(
                                   snapshot, 'Patrocínio', 'patrocinadores'),
-                            if (snapshot.data['apoiadores'].length > 0)
-                              _cardPatrocinadores(
-                                  snapshot, 'Apoio', 'apoiadores'),
-                            if (snapshot.data['organizadores'].length > 0)
-                              _cardPatrocinadores(
-                                  snapshot, 'Organização', 'organizadores')
+                            
+                            // if (snapshot.data['apoiadores'].length > 0)
+                            //   _cardPatrocinadores(
+                            //       snapshot, 'Apoio', 'apoiadores'),
+                            // if (snapshot.data['organizadores'].length > 0)
+                            //   _cardPatrocinadores(
+                            //       snapshot, 'Organização', 'organizadores')
                           ]),
-                        );
-
-
-
-
-
-                  }
-                }))
+                        ),
       ],
     );
   }
-
-  List<Widget> _buildGridTiles(AsyncSnapshot snapshot, String parceiros) {
-    List<Widget> containers =
-        List<Container>.generate(snapshot.data[parceiros].length, (int index) {
-      return Container(
-          child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Image.network(
-          url_production + snapshot.data[parceiros][index]['img_link'],
-          fit: BoxFit.fill,
-        ),
-      ));
-    });
-    return containers;
-  }
-
-  _cardPatrocinadores(
-      AsyncSnapshot snapshot, String parceiroTitle, String parceiroTipo) {
-    return Container(
-      padding: EdgeInsets.only(top: 10, right: 10, left: 10),
-      // height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        semanticContainer: true,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(parceiroTitle,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                )),
-            GridView.extent(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                maxCrossAxisExtent: 200,
-                mainAxisSpacing: 5,
-                crossAxisSpacing: 5,
-                padding: const EdgeInsets.all(5),
-                children: _buildGridTiles(snapshot, parceiroTipo))
-          ],
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        elevation: 5,
-        margin: EdgeInsets.only(top: 5),
-      ),
-    );
-  }
-
 }

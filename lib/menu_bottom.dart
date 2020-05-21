@@ -28,7 +28,11 @@ class _MenuBottomState extends State<MenuBottom> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    
+    
+    
+    Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.grey[800],
           //Usando um widget de bilder para aceitar gestor de estados pageController
@@ -95,5 +99,8 @@ class _MenuBottomState extends State<MenuBottom> {
       ),
       drawer: CustomDrawer(),
     );
+
+
+    
   }
 }
