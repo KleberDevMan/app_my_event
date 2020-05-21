@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_event/controllers/code_event_controller.dart';
+import 'package:my_event/controllers/code_controller.dart';
 import 'package:my_event/controllersOld/eventoController.dart';
 import 'package:my_event/menu_bottom.dart';
 import 'package:my_event/stores/evento_store.dart';
@@ -20,23 +20,22 @@ class _CodeEventState extends State<CodeView> {
   final TextEditingController _controllerTextFieldCode =
       TextEditingController();
 
-  final _controller = CodeEventController();
+  final _controller = CodeController();
   final _eventoStore = GetIt.instance<EventoStore>();
 
   var model = new EventoViewModel();
 
   _verificaCodigoJaExiste() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('${prefs.getString('codigo')}');
+
+    print('código salvo >> ${prefs.getString('codigo')}');
     model.codigo = prefs.getString('codigo') ?? '';
 
-
     if (!model.codigo.isEmpty) {
-      // setState(() {});
       _controller.buscaEventoPorCodigo(model).then((evento) {
         if (evento != null) {
           _eventoStore.setEvento(evento);
-          // _savarCodigoSharedPreferences(model.codigo);
+          model.busy = false;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -44,21 +43,30 @@ class _CodeEventState extends State<CodeView> {
             ),
           );
         } else {
+          model.busy = false;
           setState(() {});
         }
       });
+    } else {
+      model.busy = false;
+      setState(() {});
     }
   }
 
   _savarCodigoSharedPreferences(String codigo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('codigo', codigo);
+    print('código setado >> ${prefs.getString('codigo')}');
   }
 
   @override
   void initState() {
     super.initState();
+    model.busy = true;
     _verificaCodigoJaExiste();
+
+    // limpar code sharedPreferences
+    // _savarCodigoSharedPreferences('');
   }
 
   @override
@@ -142,15 +150,18 @@ class _CodeEventState extends State<CodeView> {
                                   if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
 
+                                    model.busy = true;
                                     setState(() {});
                                     _controller
                                         .buscaEventoPorCodigo(model)
                                         .then((evento) {
                                       if (evento != null) {
-                                        setState(() {});
                                         _eventoStore.setEvento(evento);
                                         _savarCodigoSharedPreferences(
                                             model.codigo);
+
+                                        model.busy = false;
+                                        setState(() {});
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -158,6 +169,7 @@ class _CodeEventState extends State<CodeView> {
                                           ),
                                         );
                                       } else {
+                                        model.busy = false;
                                         setState(() {});
                                       }
                                     });
