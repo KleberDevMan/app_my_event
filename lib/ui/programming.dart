@@ -6,9 +6,9 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:my_event/controllers/eventoController.dart';
+import 'package:my_event/controllersOld/eventoController.dart';
 
-import 'package:my_event/controllers/programmingController.dart';
+import 'package:my_event/controllersOld/programmingController.dart';
 
 // Requisições HTTP para localhost:
 // Use 10.0.2.2para AVD padrão e 10.0.3.2para genymotion

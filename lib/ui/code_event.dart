@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_event/controllers/eventoController.dart';
+import 'package:my_event/controllersOld/eventoController.dart';
 import 'package:my_event/menu_bottom.dart';
 
 // import 'package:http/http.dart' as http;

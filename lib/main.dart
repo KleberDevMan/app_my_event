@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:my_event/controllers/eventoController.dart';
+import 'package:my_event/controllersOld/eventoController.dart';
+import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/ui/code_event.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_event/views/code_view.dart';
 
 final getIt = GetIt.instance;
 
 // todo projeto inicia aqui, no main
 void main() {
-  getIt.registerSingleton<EventoController>(EventoController());
+  getIt.registerSingleton<EventoStore>(EventoStore());
 
   runApp(MaterialApp(
     home: Home(),
@@ -33,6 +35,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return CodeEvent();
+    // return CodeEvent();
+    return CodeView();
   }
 }
