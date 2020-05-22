@@ -1,7 +1,6 @@
 import 'package:my_event/models/evento_model.dart';
 import 'package:my_event/repositories/evento_repository.dart';
 import 'package:my_event/view-models/evento_viewmodel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CodeController {
   EventoRepository repository;

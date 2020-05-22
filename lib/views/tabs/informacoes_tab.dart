@@ -2,17 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/repositories/evento_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
+import 'package:my_event/views/custom_widgets/custom_background_gradient.dart';
 
 class InformacoesTab extends StatelessWidget {
   final _eventoStore = GetIt.instance<EventoStore>();
-
-  Widget _backgroundGradient() => Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.grey[700], Colors.black38],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter)),
-      );
 
   _cardPatrocinadores(
       String parceiroTitle, String parceiroTipo) {
@@ -101,12 +94,11 @@ class InformacoesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        _backgroundGradient(),
+        CustomBackgroundGradient(),
         SingleChildScrollView(
           padding: EdgeInsets.all(5.0),
           child: Column(children: <Widget>[
             Container(
-              // backgroundColor: Colors.grey[800]
               padding: EdgeInsets.only(top: 10, right: 10, left: 10),
               height: 500,
               width: MediaQuery.of(context).size.width,
@@ -221,13 +213,6 @@ class InformacoesTab extends StatelessWidget {
               _cardPatrocinadores('Apoio', 'apoiador'),
             if (_eventoStore.evento.organizadores.length > 0)
               _cardPatrocinadores('Organização', 'orgaonizador'),
-
-            // if (snapshot.data['apoiadores'].length > 0)
-            //   _cardPatrocinadores(
-            //       snapshot, 'Apoio', 'apoiadores'),
-            // if (snapshot.data['organizadores'].length > 0)
-            //   _cardPatrocinadores(
-            //       snapshot, 'Organização', 'organizadores')
           ]),
         ),
       ],

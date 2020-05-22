@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_event/repositories/evento_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
-import 'package:my_event/ui/info.dart';
-import 'package:my_event/ui/programming.dart';
 import 'package:my_event/views/tabs/informacoes_tab.dart';
-import 'package:my_event/widgets/custom_drawer.dart';
+import 'package:my_event/views/tabs/programacao_tab.dart';
+
+import 'custom_widgets/custom_drawer.dart';
+// import 'package:my_event/widgets/custom_drawer.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -15,8 +15,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final _eventoStore = GetIt.instance<EventoStore>();
-
   PageController _pageController;
   int _page = 0;
 
@@ -125,10 +123,8 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           children: <Widget>[
-            // PageInfo(),
-            // PageProgramming(),
             InformacoesTab(),
-            Container(color: Colors.green),
+            ProgramacaoTab(),
           ],
         ),
         drawer: CustomDrawer(),
