@@ -60,7 +60,7 @@ class InformacoesTab extends StatelessWidget {
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.img_link,
+              EventoRepository.url_production + _eventoStore.evento.patrocinadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -69,12 +69,12 @@ class InformacoesTab extends StatelessWidget {
       case 'apoiador':
         List<Widget> containers = List<Container>.generate(
             // _eventoStore.evento.apoiadores.length, (int index) {
-            _eventoStore.evento.patrocinadores.length, (int index) {
+            _eventoStore.evento.apoiadores.length, (int index) {
           return Container(
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.patrocinadores[2],
+              EventoRepository.url_production + _eventoStore.evento.apoiadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -83,12 +83,12 @@ class InformacoesTab extends StatelessWidget {
       default: //organizadores
         List<Widget> containers = List<Container>.generate(
             // _eventoStore.evento.organizadores.length, (int index) {
-            _eventoStore.evento.patrocinadores.length, (int index) {
+            _eventoStore.evento.organizadores.length, (int index) {
           return Container(
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.img_link,
+              EventoRepository.url_production + _eventoStore.evento.organizadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -118,7 +118,7 @@ class InformacoesTab extends StatelessWidget {
                   children: <Widget>[
                     Image.network(
                       EventoRepository.url_production +
-                          _eventoStore.evento.img_link,
+                          _eventoStore.evento.imgLink,
                       fit: BoxFit.fill,
                     ),
                     Text(_eventoStore.evento.titulo,
@@ -140,7 +140,7 @@ class InformacoesTab extends StatelessWidget {
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 10),
-                              child: Text(_eventoStore.evento.data_inicio,
+                              child: Text(_eventoStore.evento.dataInicioS,
                                   style: TextStyle(fontSize: 18)),
                             )
                           ]),
@@ -217,6 +217,10 @@ class InformacoesTab extends StatelessWidget {
             ),
             if (_eventoStore.evento.patrocinadores.length > 0)
               _cardPatrocinadores('Patrocínio', 'patrocinador'),
+            if (_eventoStore.evento.apoiadores.length > 0)
+              _cardPatrocinadores('Apoio', 'apoiador'),
+            if (_eventoStore.evento.organizadores.length > 0)
+              _cardPatrocinadores('Organização', 'orgaonizador'),
 
             // if (snapshot.data['apoiadores'].length > 0)
             //   _cardPatrocinadores(

@@ -16,15 +16,23 @@ class CodeController {
     return evento;
   }
 
-  Future<String> getCodigoPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('${prefs.getString('codigo')}');
-    return prefs.getString('codigo') ?? '';
+  Future<EventoModel> setDias(EventoModel model) async {
+    var evento = await repository.setDias(model);
+    if (evento == null) {
+      return null;
+    }
+    return evento;
   }
 
-  savarCodigoSharedPreferences(String codigo) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('codigo', codigo);
-  }
+  // Future<String> getCodigoPreferences() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   print('${prefs.getString('codigo')}');
+  //   return prefs.getString('codigo') ?? '';
+  // }
+
+  // savarCodigoSharedPreferences(String codigo) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('codigo', codigo);
+  // }
 
 }

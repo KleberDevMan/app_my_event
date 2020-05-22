@@ -29,4 +29,19 @@ class EventoRepository {
       return null;
     }
   }
+
+  Future<EventoModel> setDias(EventoModel evento) async {
+    try {
+      http.Response response = await http.get(url_programacao + "${evento.id}");
+      if (response.statusCode != 500) {
+        Map<String, dynamic> diasJson = json.decode(response.body);
+        evento.addDias(diasJson);
+        return evento;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 }

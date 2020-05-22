@@ -34,14 +34,27 @@ class _CodeEventState extends State<CodeView> {
     if (!model.codigo.isEmpty) {
       _controller.buscaEventoPorCodigo(model).then((evento) {
         if (evento != null) {
-          _eventoStore.setEvento(evento);
-          model.busy = false;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeView(),
-            ),
-          );
+          // busca os dias do evento retornado
+          _controller.setDias(evento).then((value) {
+            if (value != null) {
+              // deu certo. conseguiu buscar a programacao
+              _eventoStore.setEvento(value);
+              model.busy = false;
+              setState(() {});
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeView(),
+                ),
+              );
+            } else {
+              // erro no momento de carregar programacao
+              model.error = true;
+              model.msg_erro = 'Erro ao carregar programação';
+              model.busy = false;
+              setState(() {});
+            }
+          });
         } else {
           model.busy = false;
           setState(() {});
@@ -65,7 +78,7 @@ class _CodeEventState extends State<CodeView> {
     model.busy = true;
     _verificaCodigoJaExiste();
 
-    // limpar code sharedPreferences
+    // // limpar code sharedPreferences
     // _savarCodigoSharedPreferences('');
   }
 
@@ -152,23 +165,43 @@ class _CodeEventState extends State<CodeView> {
 
                                     model.busy = true;
                                     setState(() {});
+
+                                    // Busca o evento
                                     _controller
                                         .buscaEventoPorCodigo(model)
                                         .then((evento) {
                                       if (evento != null) {
-                                        _eventoStore.setEvento(evento);
-                                        _savarCodigoSharedPreferences(
-                                            model.codigo);
+                                        // busca os dias do evento retornado
+                                        _controller
+                                            .setDias(evento)
+                                            .then((value) {
+                                          if (value != null) {
+                                            // deu certo. conseguiu buscar a programacao
+                                            _eventoStore.setEvento(value);
+                                            _savarCodigoSharedPreferences(
+                                                model.codigo);
 
-                                        model.busy = false;
-                                        setState(() {});
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => HomeView(),
-                                          ),
-                                        );
+                                            // Redireciona para a home
+                                            model.busy = false;
+                                            setState(() {});
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomeView(),
+                                              ),
+                                            );
+                                          } else {
+                                            // erro no momento de carregar programacao
+                                            model.error = true;
+                                            model.msg_erro =
+                                                'Erro ao carregar programação';
+                                            model.busy = false;
+                                            setState(() {});
+                                          }
+                                        });
                                       } else {
+                                        // erro no momento de carregar evento
                                         model.busy = false;
                                         setState(() {});
                                       }

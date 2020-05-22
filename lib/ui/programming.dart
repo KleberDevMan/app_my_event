@@ -310,7 +310,11 @@ class _PageProgrammingState extends State<PageProgramming> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        return Column(
+        return 
+        
+        
+        
+        Column(
           children: <Widget>[
             Expanded(
                 child: FutureBuilder<Map>(
@@ -356,6 +360,10 @@ class _PageProgrammingState extends State<PageProgramming> {
                     }))
           ],
         );
+
+
+
+        
       },
     );
   }
