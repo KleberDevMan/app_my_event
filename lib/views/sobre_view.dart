@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_event/controllers/code_controller.dart';
 
 import 'custom_widgets/custom_background_gradient.dart';
 
 class SobreView extends StatelessWidget {
+  // final _controller = CodeController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,9 +15,10 @@ class SobreView extends StatelessWidget {
         child: Center(
           child: Column(
             children: <Widget>[
-              const Text('MY EVENT v 1.0',
+              const Text('MY EVENT',
                   style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 20,),
+              const Text('v 1.0.1'),
+                  SizedBox(height: 40,),
               const Text('Desevnolvido por:'),
               const Text('Kleber Junio Cabral Chaves', style: TextStyle(fontSize: 16)),
             ],

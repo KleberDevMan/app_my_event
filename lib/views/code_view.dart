@@ -4,6 +4,7 @@ import 'package:my_event/controllers/code_controller.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/view-models/evento_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
 
 import 'home_view.dart';
 
@@ -21,6 +22,8 @@ class _CodeEventState extends State<CodeView> {
   final _eventoStore = GetIt.instance<EventoStore>();
 
   var model = new EventoViewModel();
+
+  String version = '...';
 
   _verificaCodigoJaExiste() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,6 +78,14 @@ class _CodeEventState extends State<CodeView> {
     model.busy = true;
     _verificaCodigoJaExiste();
 
+    // busca versao atual do app
+    _controller.version().then((value) {
+      setState(() {
+        version = value;
+        // _eventoStore.
+      });
+    });
+
     // // limpar code sharedPreferences
     // _savarCodigoSharedPreferences('');
   }
@@ -103,7 +114,7 @@ class _CodeEventState extends State<CodeView> {
                         Text('MY EVENT',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white70)),
-                        Text('v 1.0',
+                        Text(version,
                             textAlign: TextAlign.center,
                             style:
                                 TextStyle(fontSize: 12, color: Colors.white70)),

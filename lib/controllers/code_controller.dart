@@ -1,17 +1,18 @@
 import 'package:my_event/models/evento_model.dart';
 import 'package:my_event/repositories/evento_repository.dart';
 import 'package:my_event/view-models/evento_viewmodel.dart';
+import 'package:package_info/package_info.dart';
 
 class CodeController {
   EventoRepository repository;
 
-  CodeController(){
+  CodeController() {
     repository = new EventoRepository();
   }
 
   Future<EventoModel> buscaEventoPorCodigo(EventoViewModel model) async {
     var evento = await repository.buscaEventoPorCodigo(model);
-    evento == null? model.error = true : model.error = false;
+    evento == null ? model.error = true : model.error = false;
     return evento;
   }
 
@@ -21,6 +22,11 @@ class CodeController {
       return null;
     }
     return evento;
+  }
+
+  Future<String> version() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
   }
 
   // Future<String> getCodigoPreferences() async {
