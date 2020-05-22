@@ -24,7 +24,7 @@ class EventoModel {
     code = json['code'];
     img_link = json['img_link'];
     titulo = json['titulo'];
-    data_inicio = json['data_inicio'];
+    data_inicio = json['data_inicio_s'];
     local = json['local'];
     descricao = json['descricao'];
     patrocinadores = json['patrocinadores'];
