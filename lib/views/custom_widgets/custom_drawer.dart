@@ -1,21 +1,18 @@
+// menu hamburguer
+
 import 'package:flutter/material.dart';
-import 'package:my_event/tiles/DrawerTile.dart';
+import 'package:my_event/views/login_view.dart';
+
+import 'custom_background_gradient.dart';
+import 'custom_drawer_tile.dart';
 
 class CustomDrawer extends StatelessWidget {
-  Widget _buildDrawerBack() => Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.grey[700], Colors.black38],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter)),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Stack(
         children: <Widget>[
-          _buildDrawerBack(),
+          CustomBackgroundGradient(),
           ListView(
             padding: EdgeInsets.only(top: 10, left: 32),
             children: <Widget>[
@@ -43,14 +40,19 @@ class CustomDrawer extends StatelessWidget {
                                   fontSize: 18, fontWeight: FontWeight.bold)),
                           GestureDetector(
                             child: Text(
-                              "Entre ou cadastre-se >",
+                              "Entre ou cadastre-se",
                               style: TextStyle(
-                                  color: Colors.white70,
+                                  color: Colors.green[500],
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold),
                             ),
                             onTap: () {
-                              print('login...');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginView(),
+                                ),
+                              );
                             },
                           )
                         ],
@@ -60,8 +62,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               Divider(),
-              DrawerTile(Icons.assignment, 'Minhas inscrições'),
-              DrawerTile(Icons.info_outline, 'Sobre'),
+              CustomDrawerTile(Icons.assignment, 'Minhas inscrições', 0),
+              CustomDrawerTile(Icons.info_outline, 'Sobre', 1),
             ],
           ),
         ],

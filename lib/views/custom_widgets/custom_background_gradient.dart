@@ -1,3 +1,5 @@
+// background gradiente usada nas tabs do app
+
 import 'package:flutter/material.dart';
 
 class CustomBackgroundGradient extends StatelessWidget {

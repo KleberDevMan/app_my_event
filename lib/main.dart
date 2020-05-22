@@ -10,6 +10,7 @@ void main() {
   getIt.registerSingleton<EventoStore>(EventoStore());
 
   runApp(MaterialApp(
+    title: 'MyEvent',
     home: Home(),
     debugShowCheckedModeBanner: false,
     theme: ThemeData(

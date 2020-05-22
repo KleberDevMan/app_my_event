@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/stores/evento_store.dart';
+import 'package:my_event/views/comunicados_view.dart';
 import 'package:my_event/views/tabs/informacoes_tab.dart';
 import 'package:my_event/views/tabs/programacao_tab.dart';
 
@@ -77,7 +78,14 @@ class _HomeViewState extends State<HomeView> {
                   ? Padding(
                       padding: EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ComunicadosView(),
+                            ),
+                          );
+                        },
                         child: Icon(
                           Icons.notifications,
                           size: 26.0,

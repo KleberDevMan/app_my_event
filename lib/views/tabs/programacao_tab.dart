@@ -226,10 +226,16 @@ class _ProgramacaoTabState extends State<ProgramacaoTab> {
             actions: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  // Spacer(
+                  //   flex: 2,
+                  // ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.20,
+                    // width: 20,
+                    // padding: Ed,
                     child: RaisedButton(
+                      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                       child: new Text(
                         'Fechar',
                         style: TextStyle(color: Colors.white),
@@ -244,33 +250,36 @@ class _ProgramacaoTabState extends State<ProgramacaoTab> {
                       },
                     ),
                   ),
-
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.01,
+                    width: 15,
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(right: 70.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.30,
-                      child: RaisedButton(
-                        child: new Text(
-                          'Inscrever-se',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.blue[800],
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
+                  Container(
+                    // width: MediaQuery.of(context).size.width * 0.30,
+                    margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.13),
+                    child: RaisedButton(
+                      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      child: new Text(
+                        'Inscrever-se',
+                        style: TextStyle(color: Colors.white),
                       ),
+                      color: Colors.blue[800],
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ),
-
+                  // Spacer(
+                  //   flex: 2,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 70.0),
+                  //   child:
+                  // ),
                 ],
-              )
+              ),
             ],
           );
         });
