@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/views/comunicados_view.dart';
 import 'package:my_event/views/tabs/informacoes_tab.dart';
 import 'package:my_event/views/tabs/programacao_tab.dart';

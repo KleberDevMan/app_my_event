@@ -4,7 +4,6 @@ import 'package:my_event/controllers/code_controller.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/view-models/evento_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:package_info/package_info.dart';
 
 import 'home_view.dart';
 
