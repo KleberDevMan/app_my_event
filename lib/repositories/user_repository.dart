@@ -79,7 +79,9 @@ class UserRepository extends Model {
   }
 
   // Recuperar senha
-  void recoverPass() {}
+  void recoverPass(String email) {
+    _auth.sendPasswordResetEmail(email: email);
+  }
 
   // Está logado?
   bool isLoggedIn() {

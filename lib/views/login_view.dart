@@ -67,7 +67,28 @@ class _LoginViewState extends State<LoginView> {
               Align(
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_emailController.text.isEmpty) {
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text('Insira seu email para recuperação!',
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.bold)),
+                          backgroundColor: Colors.redAccent,
+                          duration: Duration(seconds: 2),
+                        ));
+                      } else {
+                        model.recoverPass(_emailController.text);
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text('Confira seu email!',
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.bold)),
+                          backgroundColor: Colors.green[500],
+                          duration: Duration(seconds: 2),
+                        ));
+                      }
+                    },
                     child: Text(
                       'Esqueci minha senha',
                       textAlign: TextAlign.right,
@@ -82,14 +103,12 @@ class _LoginViewState extends State<LoginView> {
                 child: RaisedButton(
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      print('entrando...');
+                      model.signIn(
+                          email: _emailController.text,
+                          senha: _senhaController.text,
+                          onSuccess: _onSuccess,
+                          onFail: _onFail);
                     }
-                    model.signIn(
-                      email: _emailController.text, 
-                      senha: _senhaController.text,
-                      onSuccess: _onSuccess,
-                      onFail: _onFail
-                    );
                   },
                   child: Text('Entrar', style: TextStyle(fontSize: 18)),
                   color: Colors.green[800],
@@ -105,9 +124,11 @@ class _LoginViewState extends State<LoginView> {
   void _onSuccess() {
     Navigator.of(context).pop();
   }
+
   void _onFail() {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('Falha ao entrar!'),
+      content: Text('Falha ao entrar!',
+          style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),
     ));
