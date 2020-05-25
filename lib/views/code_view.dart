@@ -40,12 +40,15 @@ class _CodeEventState extends State<CodeView> {
               _eventoStore.setEvento(value);
               model.busy = false;
               setState(() {});
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeView(),
-                ),
-              );
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => HomeView()));
+
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => HomeView(),
+              //   ),
+              // );
             } else {
               // erro no momento de carregar programacao
               model.error = true;
@@ -191,13 +194,19 @@ class _CodeEventState extends State<CodeView> {
                                             // Redireciona para a home
                                             model.busy = false;
                                             setState(() {});
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HomeView(),
-                                              ),
-                                            );
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HomeView()));
+
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         HomeView(),
+                                            //   ),
+                                            // );
                                           } else {
                                             // erro no momento de carregar programacao
                                             model.error = true;

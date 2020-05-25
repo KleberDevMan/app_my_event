@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_event/repositories/user_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/views/code_view.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 final getIt = GetIt.instance;
 
@@ -9,16 +11,9 @@ final getIt = GetIt.instance;
 void main() {
   getIt.registerSingleton<EventoStore>(EventoStore());
 
-  runApp(MaterialApp(
-    title: 'MyEvent',
-    home: Home(),
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.orange,
-        fontFamily: 'Roboto'),
-  
-  ));
+  runApp(new Home());
+
+  // Firestore.instance.collection('col').document('doc').setData({'texto': 'JUNIO'});
 }
 
 class Home extends StatefulWidget {
@@ -29,6 +24,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return CodeView();
+    return ScopedModel<UserRepository>(
+        model: UserRepository(),
+        child: MaterialApp(
+          title: 'MyEvent',
+          home: CodeView(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              brightness: Brightness.dark,
+              primarySwatch: Colors.orange,
+              fontFamily: 'Roboto'),
+        ));
   }
 }

@@ -27,11 +27,20 @@ dependencies:
   mobx: ^1.2.0
   flutter_mobx: ^1.1.0
 
-  # scoped_model: ^1.0.1
+  
   get_it: ^4.0.2
   flutter_launcher_icons: ^0.7.5
   shared_preferences: ^0.5.7+2
   package_info: ^0.4.0+18
+
+  # firebase
+  cloud_firestore: ^0.13.5
+  image_picker: ^0.6.6+4
+  google_sign_in: ^4.5.1 # login google
+  firebase_storage: ^3.1.5 # armazenamento arquivos
+  firebase_auth: ^0.16.0 # autenticacao
+  firebase_messaging: ^6.0.15 # notificacoes push
+  scoped_model: ^1.0.1 # gerencia de estado
 
 dev_dependencies:
   mobx_codegen: ^1.1.0
