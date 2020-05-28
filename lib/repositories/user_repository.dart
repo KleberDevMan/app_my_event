@@ -13,6 +13,10 @@ class UserRepository extends Model {
 
   bool isLoading = false;
 
+  // metodo statico para acessar esse repository do jeito que ele estiver, de qualquer lugar, sem ter que instacia-lo
+  // vai evitar ter que usar o scopedModelDescendent<UserRepository>
+  static UserRepository of(BuildContext context) => ScopedModel.of<UserRepository>(context);
+
   @override
   void addListener(VoidCallback listener) {
     super.addListener(listener);

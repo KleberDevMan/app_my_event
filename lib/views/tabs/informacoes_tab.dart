@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/repositories/evento_repository.dart';
+import 'package:my_event/repositories/inscricao_repository.dart';
+import 'package:my_event/repositories/user_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/views/custom_widgets/custom_background_gradient.dart';
+import 'package:my_event/views/login_view.dart';
 
 class InformacoesTab extends StatelessWidget {
   final _eventoStore = GetIt.instance<EventoStore>();
 
-  _cardPatrocinadores(
-      String parceiroTitle, String parceiroTipo) {
+  _cardPatrocinadores(String parceiroTitle, String parceiroTipo) {
     return Container(
       padding: EdgeInsets.only(top: 10, right: 10, left: 10),
       // height: MediaQuery.of(context).size.height,
@@ -53,7 +55,8 @@ class InformacoesTab extends StatelessWidget {
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.patrocinadores[index].imgLink,
+              EventoRepository.url_production +
+                  _eventoStore.evento.patrocinadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -67,7 +70,8 @@ class InformacoesTab extends StatelessWidget {
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.apoiadores[index].imgLink,
+              EventoRepository.url_production +
+                  _eventoStore.evento.apoiadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -81,7 +85,8 @@ class InformacoesTab extends StatelessWidget {
               child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              EventoRepository.url_production + _eventoStore.evento.organizadores[index].imgLink,
+              EventoRepository.url_production +
+                  _eventoStore.evento.organizadores[index].imgLink,
               fit: BoxFit.fill,
             ),
           ));
@@ -170,7 +175,12 @@ class InformacoesTab extends StatelessWidget {
                                   width: 20,
                                 ),
                                 Text(
-                                  "Inscrever-se",
+                                  UserRepository.of(context).isLoggedIn()
+                                      ? InscricaoRepository.of(context)
+                                              .inscritoNoEventoAtual()
+                                          ? 'Desinscrever-se'
+                                          : 'Inscrever-se'
+                                      : "Entre",
                                   style: TextStyle(
                                       fontSize: 20, color: Colors.white),
                                 ),
@@ -178,7 +188,19 @@ class InformacoesTab extends StatelessWidget {
                             ),
                             color: Colors.green[800],
                             onPressed: () {
-                              print('click...');
+                              if (UserRepository.of(context).isLoggedIn()) {
+                                if (InscricaoRepository.of(context)
+                                    .inscritoNoEventoAtual()) {
+                                  // Desinscrever-se
+                                } else {
+                                  // Inscrever-se
+                                  InscricaoRepository.of(context).addInscricaoEvento();
+                                }
+                              } else {
+                                // Entre para se inscrever
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => LoginView()));
+                              }
                             },
                           ),
                         ),

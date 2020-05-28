@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_event/repositories/inscricao_repository.dart';
 import 'package:my_event/repositories/user_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:get_it/get_it.dart';
@@ -26,14 +27,18 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return ScopedModel<UserRepository>(
         model: UserRepository(),
-        child: MaterialApp(
-          title: 'MyEvent',
-          home: CodeView(),
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-              brightness: Brightness.dark,
-              primarySwatch: Colors.orange,
-              fontFamily: 'Roboto'),
-        ));
+        child: ScopedModelDescendant<UserRepository>(builder: (context, child, model) {
+          return ScopedModel<InscricaoRepository>(
+              model: InscricaoRepository(model),
+              child: MaterialApp(
+                title: 'MyEvent',
+                home: CodeView(),
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                    brightness: Brightness.dark,
+                    primarySwatch: Colors.orange,
+                    fontFamily: 'Roboto'),
+              ));
+        }));
   }
 }
