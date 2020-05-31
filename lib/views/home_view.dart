@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_event/repositories/inscricao_repository.dart';
 import 'package:my_event/views/comunicados_view.dart';
 import 'package:my_event/views/tabs/informacoes_tab.dart';
 import 'package:my_event/views/tabs/programacao_tab.dart';
@@ -16,6 +17,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   PageController _pageController;
   int _page = 0;
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -62,13 +65,14 @@ class _HomeViewState extends State<HomeView> {
       //   _onBackPressed();
       // },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
             backgroundColor: Colors.grey[800],
             //Usando um widget de bilder para aceitar gestor de estados pageController
             title: AnimatedBuilder(
                 animation: _pageController,
                 builder: (_, __) {
-                  return Text(['Informações', 'Programação'][_page]);
+                  return Text(['Informações', 'Programação${InscricaoRepository.of(context).idInscricaoEvento}'][_page]);
                 }),
             centerTitle: true,
             actions: <Widget>[
@@ -129,7 +133,7 @@ class _HomeViewState extends State<HomeView> {
             });
           },
           children: <Widget>[
-            InformacoesTab(),
+            InformacoesTab(_scaffoldKey),
             ProgramacaoTab(),
           ],
         ),

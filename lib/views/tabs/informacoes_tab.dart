@@ -6,9 +6,13 @@ import 'package:my_event/repositories/user_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/views/custom_widgets/custom_background_gradient.dart';
 import 'package:my_event/views/login_view.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class InformacoesTab extends StatelessWidget {
   final _eventoStore = GetIt.instance<EventoStore>();
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  InformacoesTab(this.scaffoldKey);
 
   _cardPatrocinadores(String parceiroTitle, String parceiroTipo) {
     return Container(
@@ -163,46 +167,59 @@ class InformacoesTab extends StatelessWidget {
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(left: 30, right: 10),
-                          child: RaisedButton(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 20.0,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  UserRepository.of(context).isLoggedIn()
-                                      ? InscricaoRepository.of(context)
-                                              .inscritoNoEventoAtual()
-                                          ? 'Desinscrever-se'
-                                          : 'Inscrever-se'
-                                      : "Entre",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            color: Colors.green[800],
-                            onPressed: () {
-                              if (UserRepository.of(context).isLoggedIn()) {
-                                if (InscricaoRepository.of(context)
-                                    .inscritoNoEventoAtual()) {
-                                  // Desinscrever-se
+                          child: ScopedModelDescendant<InscricaoRepository>(
+                              builder: (context, child, model) {
+                            if (model.isLoading)
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            return 
+                            
+                            RaisedButton(
+                              child: 
+                              
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    model.inscritoNoEventoAtual() ? Icons.delete : Icons.add,
+                                    color: Colors.white,
+                                    size: 20.0,
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Text(
+                                    UserRepository.of(context).isLoggedIn()
+                                        ? model.inscritoNoEventoAtual()
+                                            ? 'Desinscrever-se'
+                                            : 'Inscrever-se'
+                                        : "Entre",
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              
+                              color: model.inscritoNoEventoAtual() ? Colors.redAccent : Colors.green[800],
+                              onPressed: () {
+                                if (UserRepository.of(context).isLoggedIn()) {
+                                  if (model.inscritoNoEventoAtual()) {
+                                    // Desinscrever-se
+
+                                    print('>> cancelar inscrição...');
+                                  } else {
+                                    // Inscrever-se
+                                    model.addInscricaoEvento(
+                                      onSuccess: _onSuccess,
+                                      onFail: _onFail,
+                                    );
+                                  }
                                 } else {
-                                  // Inscrever-se
-                                  InscricaoRepository.of(context).addInscricaoEvento();
+                                  // Entre para se inscrever
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => LoginView()));
                                 }
-                              } else {
-                                // Entre para se inscrever
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => LoginView()));
-                              }
-                            },
-                          ),
+                              },
+                            );
+                          }),
                         ),
                       )
 
@@ -239,5 +256,21 @@ class InformacoesTab extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onSuccess() {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Inscrição no evento realizada sucesso!'),
+      backgroundColor: Colors.green[500],
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  void _onFail() {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Falha ao realizar inscrição no evento!'),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
   }
 }
