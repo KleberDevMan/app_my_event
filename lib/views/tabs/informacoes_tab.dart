@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/repositories/evento_repository.dart';
 import 'package:my_event/repositories/inscricao_repository.dart';
@@ -165,62 +166,100 @@ class InformacoesTab extends StatelessWidget {
 
                       // Column(children: <Widget>[
                       Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30, right: 10),
-                          child: ScopedModelDescendant<InscricaoRepository>(
-                              builder: (context, child, model) {
-                            if (model.isLoading)
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            return 
-                            
-                            RaisedButton(
-                              child: 
-                              
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    model.inscritoNoEventoAtual() ? Icons.delete : Icons.add,
-                                    color: Colors.white,
-                                    size: 20.0,
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    UserRepository.of(context).isLoggedIn()
-                                        ? model.inscritoNoEventoAtual()
-                                            ? 'Desinscrever-se'
-                                            : 'Inscrever-se'
-                                        : "Entre",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              
-                              color: model.inscritoNoEventoAtual() ? Colors.redAccent : Colors.green[800],
-                              onPressed: () {
-                                if (UserRepository.of(context).isLoggedIn()) {
-                                  if (model.inscritoNoEventoAtual()) {
-                                    // Desinscrever-se
+                        child: Observer(builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.only(left: 30, right: 10),
 
-                                    print('>> cancelar inscrição...');
-                                  } else {
-                                    // Inscrever-se
-                                    model.addInscricaoEvento(
-                                      onSuccess: _onSuccess,
-                                      onFail: _onFail,
-                                    );
-                                  }
-                                } else {
-                                  // Entre para se inscrever
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => LoginView()));
-                                }
-                              },
-                            );
-                          }),
-                        ),
+                            child:
+
+                                // ScopedModelDescendant<InscricaoRepository>(
+                                //     builder: (context, child, model) {
+
+                                _eventoStore.desejaInscreverSe
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : RaisedButton(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              UserRepository.of(context)
+                                                      .isLoggedIn()
+                                                  ? _eventoStore
+                                                          .inscritoNoEventoAtual(
+                                                              UserRepository.of(
+                                                                      context)
+                                                                  .firebaseUser
+                                                                  .uid)
+                                                      ? Icons.delete
+                                                      : Icons.add
+                                                  : Icons.add,
+                                              color: Colors.white,
+                                              size: 20.0,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              UserRepository.of(context)
+                                                      .isLoggedIn()
+                                                  ? _eventoStore
+                                                          .inscritoNoEventoAtual(
+                                                              UserRepository.of(
+                                                                      context)
+                                                                  .firebaseUser
+                                                                  .uid)
+                                                      ? 'Desinscrever-se'
+                                                      : 'Inscrever-se'
+                                                  : 'Inscrever-se',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        color: UserRepository.of(context)
+                                                .isLoggedIn()
+                                            ? _eventoStore
+                                                    .inscritoNoEventoAtual(
+                                                        UserRepository.of(
+                                                                context)
+                                                            .firebaseUser
+                                                            .uid)
+                                                ? Colors.redAccent
+                                                : Colors.green[800]
+                                            : Colors.green[800],
+                                        onPressed: () {
+                                          if (UserRepository.of(context)
+                                              .isLoggedIn()) {
+                                            
+                                            if (_eventoStore
+                                                .inscritoNoEventoAtual(
+                                                    UserRepository.of(context)
+                                                        .firebaseUser
+                                                        .uid)) {
+                                              print('removendo inscrição....');
+                                            }
+
+                                            print('fazendo inscrição no evento...');
+
+                                          } else {
+                                            // Seta que ele esta logando porque deseja se increver
+                                            _eventoStore
+                                                .setDesejaInscreverSe(true);
+
+                                            // Entre para se inscrever
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginView()));
+                                          }
+                                        },
+                                      ),
+
+                            // }),
+                          );
+                        }),
                       )
 
                       // ]),
@@ -258,19 +297,19 @@ class InformacoesTab extends StatelessWidget {
     );
   }
 
-  void _onSuccess() {
-    scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('Inscrição no evento realizada sucesso!'),
-      backgroundColor: Colors.green[500],
-      duration: Duration(seconds: 2),
-    ));
-  }
+  // void _onSuccess() {
+  //   scaffoldKey.currentState.showSnackBar(SnackBar(
+  //     content: Text('Inscrição no evento realizada sucesso!'),
+  //     backgroundColor: Colors.green[500],
+  //     duration: Duration(seconds: 2),
+  //   ));
+  // }
 
-  void _onFail() {
-    scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('Falha ao realizar inscrição no evento!'),
-      backgroundColor: Colors.redAccent,
-      duration: Duration(seconds: 2),
-    ));
-  }
+  // void _onFail() {
+  //   scaffoldKey.currentState.showSnackBar(SnackBar(
+  //     content: Text('Falha ao realizar inscrição no evento!'),
+  //     backgroundColor: Colors.redAccent,
+  //     duration: Duration(seconds: 2),
+  //   ));
+  // }
 }

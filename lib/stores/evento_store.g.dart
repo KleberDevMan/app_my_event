@@ -24,8 +24,50 @@ mixin _$EventoStore on _EventoStoreBase, Store {
     });
   }
 
+  final _$dadosAtom = Atom(name: '_EventoStoreBase.dados');
+
+  @override
+  Map<String, dynamic> get dados {
+    _$dadosAtom.reportRead();
+    return super.dados;
+  }
+
+  @override
+  set dados(Map<String, dynamic> value) {
+    _$dadosAtom.reportWrite(value, super.dados, () {
+      super.dados = value;
+    });
+  }
+
+  final _$desejaInscreverSeAtom =
+      Atom(name: '_EventoStoreBase.desejaInscreverSe');
+
+  @override
+  bool get desejaInscreverSe {
+    _$desejaInscreverSeAtom.reportRead();
+    return super.desejaInscreverSe;
+  }
+
+  @override
+  set desejaInscreverSe(bool value) {
+    _$desejaInscreverSeAtom.reportWrite(value, super.desejaInscreverSe, () {
+      super.desejaInscreverSe = value;
+    });
+  }
+
   final _$_EventoStoreBaseActionController =
       ActionController(name: '_EventoStoreBase');
+
+  @override
+  bool inscritoNoEventoAtual(String user_id) {
+    final _$actionInfo = _$_EventoStoreBaseActionController.startAction(
+        name: '_EventoStoreBase.inscritoNoEventoAtual');
+    try {
+      return super.inscritoNoEventoAtual(user_id);
+    } finally {
+      _$_EventoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic setEvento(EventoModel value) {
@@ -39,9 +81,33 @@ mixin _$EventoStore on _EventoStoreBase, Store {
   }
 
   @override
+  dynamic setArquivoDados(Map<String, dynamic> value) {
+    final _$actionInfo = _$_EventoStoreBaseActionController.startAction(
+        name: '_EventoStoreBase.setArquivoDados');
+    try {
+      return super.setArquivoDados(value);
+    } finally {
+      _$_EventoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setDesejaInscreverSe(bool value) {
+    final _$actionInfo = _$_EventoStoreBaseActionController.startAction(
+        name: '_EventoStoreBase.setDesejaInscreverSe');
+    try {
+      return super.setDesejaInscreverSe(value);
+    } finally {
+      _$_EventoStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-evento: ${evento}
+evento: ${evento},
+dados: ${dados},
+desejaInscreverSe: ${desejaInscreverSe}
     ''';
   }
 }

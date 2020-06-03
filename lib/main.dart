@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:my_event/repositories/inscricao_repository.dart';
 import 'package:my_event/repositories/user_repository.dart';
@@ -5,6 +8,7 @@ import 'package:my_event/stores/evento_store.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/views/code_view.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 
 final getIt = GetIt.instance;
 
@@ -23,6 +27,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   @override
   Widget build(BuildContext context) {
     return ScopedModel<UserRepository>(
@@ -41,4 +46,6 @@ class _HomeState extends State<Home> {
               ));
         }));
   }
+
+  
 }

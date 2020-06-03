@@ -1,0 +1,18 @@
+{
+  "last_event_code": "2020102",
+  "WxUsuarioId": {
+    "eventos": [
+      {
+        "evento_code": "2020102",
+        "evento_id": "2",
+        "inscricao_evento_id": "",
+        "inscricao_atividades": [
+          {
+            "atividade_id": "2",
+            "id_inscricao": ""
+          }
+        ]
+      }
+    ]
+  }
+}

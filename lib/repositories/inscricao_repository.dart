@@ -53,17 +53,19 @@ class InscricaoRepository extends Model {
   bool inscritoNoEventoAtual() {
     isLoading = true;
 
-    if (idInscricaoEvento == null) {
-      // primeiro, verifica se esta salva no sharedPreferences
-      // depois, tentar buscar no firebase
-      _verificaInscricaoEventoJaExiste().then((doc) {
-        isLoading = false;
-        return idInscricaoEvento != null;
-      });
-    } else {
-      isLoading = false;
-      return true;
-    }
+    // if (idInscricaoEvento == null) {
+    //   // primeiro, verifica se esta salva no sharedPreferences
+    //   // depois, tentar buscar no firebase
+    //   _verificaInscricaoEventoJaExiste().then((doc) {
+    //     isLoading = false;
+    //     return idInscricaoEvento != null;
+    //   });
+    // } else {
+    //   isLoading = false;
+    //   return true;
+    // }
+
+    isLoading = false;
     return idInscricaoEvento != null;
   }
 

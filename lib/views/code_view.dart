@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_event/controllers/code_controller.dart';
+import 'package:my_event/repositories/arquivo_dados_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:my_event/view-models/evento_viewmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'home_view.dart';
 
@@ -22,37 +27,129 @@ class _CodeEventState extends State<CodeView> {
 
   var model = new EventoViewModel();
 
+  final _arquivoDadosRepository = new ArquivoDadosRepository();
+
   String version = '...';
 
-  _verificaCodigoJaExiste() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  List _arquivo = [];
+  Map<String, dynamic> _dados;
 
-    print('código salvo >> ${prefs.getString('codigo')}');
-    model.codigo = prefs.getString('codigo') ?? '';
+  // _verificaCodigoJaExiste() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (!model.codigo.isEmpty) {
-      _controller.buscaEventoPorCodigo(model).then((evento) {
-        if (evento != null) {
-          // busca os dias do evento retornado
-          _controller.setDias(evento).then((value) {
-            if (value != null) {
-              // deu certo. conseguiu buscar a programacao
-              _eventoStore.setEvento(value);
-              model.busy = false;
-              setState(() {});
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => HomeView()));
+  //   print('código salvo >> ${prefs.getString('codigo')}');
+  //   model.codigo = prefs.getString('codigo') ?? '';
 
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => HomeView(),
-              //   ),
-              // );
+  //   if (!model.codigo.isEmpty) {
+  //     _controller.buscaEventoPorCodigo(model).then((evento) {
+  //       if (evento != null) {
+  //         // busca os dias do evento retornado
+  //         _controller.setDias(evento).then((value) {
+  //           if (value != null) {
+  //             // deu certo. conseguiu buscar a programacao
+  //             _eventoStore.setEvento(value);
+  //             model.busy = false;
+  //             setState(() {});
+  //             Navigator.of(context).pushReplacement(
+  //                 MaterialPageRoute(builder: (context) => HomeView()));
+
+  //             // Navigator.push(
+  //             //   context,
+  //             //   MaterialPageRoute(
+  //             //     builder: (context) => HomeView(),
+  //             //   ),
+  //             // );
+  //           } else {
+  //             // erro no momento de carregar programacao
+  //             model.error = true;
+  //             model.msg_erro = 'Erro ao carregar programação';
+  //             model.busy = false;
+  //             setState(() {});
+  //           }
+  //         });
+  //       } else {
+  //         model.busy = false;
+  //         setState(() {});
+  //       }
+  //     });
+  //   } else {
+  //     model.busy = false;
+  //     setState(() {});
+  //   }
+  // }
+
+  // _savarCodigoSharedPreferences(String codigo) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('codigo', codigo);
+  //   print('código setado >> ${prefs.getString('codigo')}');
+  // }
+
+  _savarCodigoArquivo(String codigo) async {
+    _arquivoDadosRepository.readData().then((arquive) {
+      _arquivo = json.decode(arquive);
+      _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
+
+      print('arquivo antes >> ${_dados}');
+
+      _dados['last_event_code'] = codigo;
+      _arquivo.add(_dados);
+
+      print('arquivo depois >> ${_dados}');
+
+      // salva arquivo no celular
+      _saveData();
+    });
+  }
+
+  _apagarDadosArquivo() async {
+    _arquivoDadosRepository.readData().then((arquive) {
+      _arquivo = json.decode(arquive);
+
+      _arquivo.clear();
+
+      // salva arquivo no celular
+      _saveData();
+    });
+  }
+
+  _verificaCodigoJaExisteNoArquivo() async {
+    _readData().then((arquive) {
+      _arquivo = json.decode(arquive);
+      _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
+
+      print('arquivo salvo >> ${_dados}');
+
+      if (_dados.isEmpty) {
+        model.busy = false;
+        setState(() {});
+      } else {
+        if (_dados['last_event_code'] != null) {
+          // tenho os dados salvos e carregados
+          model.codigo = _dados['last_event_code'];
+          _controller.buscaEventoPorCodigo(model).then((evento) {
+            if (evento != null) {
+              // busca os dias do evento retornado
+              _controller.setDias(evento).then((value) {
+                if (value != null) {
+                  // deu certo. conseguiu buscar a programacao
+                  _eventoStore.setEvento(value);
+
+                  _eventoStore.setArquivoDados(_dados);
+                  model.busy = false;
+                  setState(() {});
+
+                  // Navega para outra página apagando esta
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => HomeView()));
+                } else {
+                  // erro no momento de carregar programacao
+                  model.error = true;
+                  model.msg_erro = 'Erro ao carregar programação';
+                  model.busy = false;
+                  setState(() {});
+                }
+              });
             } else {
-              // erro no momento de carregar programacao
-              model.error = true;
-              model.msg_erro = 'Erro ao carregar programação';
               model.busy = false;
               setState(() {});
             }
@@ -61,35 +158,79 @@ class _CodeEventState extends State<CodeView> {
           model.busy = false;
           setState(() {});
         }
-      });
-    } else {
-      model.busy = false;
-      setState(() {});
-    }
+      }
+    });
   }
 
-  _savarCodigoSharedPreferences(String codigo) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('codigo', codigo);
-    print('código setado >> ${prefs.getString('codigo')}');
+  _verificaCodigoJaExisteNoArquivo2() async {
+    model.busy = true;
+    _arquivoDadosRepository.readData().then((arquive) {
+      _arquivo = json.decode(arquive);
+      _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
+
+      print('arquivo salvo >> ${_dados}');
+
+      if (_dados.isEmpty) {
+        model.busy = false;
+        setState(() {});
+      } else {
+        if (_dados['last_event_code'] != null) {
+          // tenho os dados salvos e carregados
+          model.codigo = _dados['last_event_code'];
+          _controller.buscaEventoPorCodigo(model).then((evento) {
+            if (evento != null) {
+              // busca os dias do evento retornado
+              _controller.setDias(evento).then((value) {
+                if (value != null) {
+                  // deu certo. conseguiu buscar a programacao
+                  _eventoStore.setEvento(value);
+
+                  _eventoStore.setArquivoDados(_dados);
+                  model.busy = false;
+                  setState(() {});
+
+                  // Navega para outra página apagando esta
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => HomeView()));
+                } else {
+                  // erro no momento de carregar programacao
+                  model.error = true;
+                  model.msg_erro = 'Erro ao carregar programação';
+                  model.busy = false;
+                  setState(() {});
+                }
+              });
+            } else {
+              model.busy = false;
+              setState(() {});
+            }
+          });
+        } else {
+          model.busy = false;
+          setState(() {});
+        }
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    model.busy = true;
-    _verificaCodigoJaExiste();
+
+    _verificaCodigoJaExisteNoArquivo2();
 
     // busca versao atual do app
     _controller.version().then((value) {
       setState(() {
         version = value;
-        // _eventoStore.
       });
     });
 
     // // limpar code sharedPreferences
     // _savarCodigoSharedPreferences('');
+
+    // limpar arquivo
+    // _apagarDadosArquivo();
   }
 
   @override
@@ -187,10 +328,11 @@ class _CodeEventState extends State<CodeView> {
                                             .then((value) {
                                           if (value != null) {
                                             // deu certo. conseguiu buscar a programacao
-                                            _eventoStore.setEvento(value);
-                                            _savarCodigoSharedPreferences(
-                                                model.codigo);
+                                            _savarCodigoArquivo(model.codigo);
 
+                                            _eventoStore.setEvento(value);
+                                            _eventoStore
+                                                .setArquivoDados(_dados);
                                             // Redireciona para a home
                                             model.busy = false;
                                             setState(() {});
@@ -245,5 +387,27 @@ class _CodeEventState extends State<CodeView> {
               ),
             ),
     );
+  }
+
+  Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
+  }
+
+  Future<File> _saveData() async {
+    String data = json.encode(_arquivo);
+
+    final file = await _getFile();
+    return file.writeAsString(data);
+  }
+
+  Future<String> _readData() async {
+    try {
+      final file = await _getFile();
+
+      return file.readAsString();
+    } catch (e) {
+      return null;
+    }
   }
 }

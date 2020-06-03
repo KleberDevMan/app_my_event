@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_event/models/user_model.dart';
+import 'package:my_event/repositories/inscricao_repository.dart';
+import 'package:my_event/stores/evento_store.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class UserRepository extends Model {
   FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final _eventoStore = GetIt.instance<EventoStore>();
 
   FirebaseUser firebaseUser;
   // UserModel userData;
@@ -15,13 +20,14 @@ class UserRepository extends Model {
 
   // metodo statico para acessar esse repository do jeito que ele estiver, de qualquer lugar, sem ter que instacia-lo
   // vai evitar ter que usar o scopedModelDescendent<UserRepository>
-  static UserRepository of(BuildContext context) => ScopedModel.of<UserRepository>(context);
+  static UserRepository of(BuildContext context) =>
+      ScopedModel.of<UserRepository>(context);
 
   @override
   void addListener(VoidCallback listener) {
     super.addListener(listener);
 
-    _loadCurrentUser(); 
+    _loadCurrentUser();
   }
 
   // inscrever-se
@@ -44,6 +50,38 @@ class UserRepository extends Model {
 
       // salvar no firebaseStore
       await _saveUserData(userData);
+
+      if (_eventoStore.desejaInscreverSe &&
+          !_eventoStore.inscritoNoEventoAtual(firebaseUser.uid)) {
+        Firestore.instance.collection('inscricoes_evento').add({
+          'evento_id': '${_eventoStore.evento.id}',
+          'user_id': '${firebaseUser.uid}'
+        }).then((doc) {
+          print('inscrição realizada >> ' + '$doc');
+          String idInscricaoEvento = doc.documentID;
+
+          // salva no arquivo
+          Map<String, dynamic> _dados = Map();
+          _dados[firebaseUser.uid] = {
+            "eventos": [
+              {
+                "evento_code": _eventoStore.evento.code,
+                "evento_id": _eventoStore.evento.id,
+                "inscricao_evento_id": idInscricaoEvento,
+                "inscricao_atividades": [{}]
+              }
+            ]
+          };
+          print('Salvando dados no arquivo >> ${_dados.toString()}');
+
+          // carrega arquivo no store
+          // _eventoStore.setArquivoDados(_);
+        }).catchError((error) {
+          print('erro ao realizar inscrição >> ' + '$error');
+        });
+
+        _eventoStore.setDesejaInscreverSe(false);
+      }
 
       onSuccess();
       isLoading = false;
@@ -71,6 +109,37 @@ class UserRepository extends Model {
       firebaseUser = value.user;
 
       await _loadCurrentUser();
+
+      if (_eventoStore.desejaInscreverSe &&
+          !_eventoStore.inscritoNoEventoAtual(firebaseUser.uid)) {
+        Firestore.instance.collection('inscricoes_evento').add({
+          'evento_id': '${_eventoStore.evento.id}',
+          'user_id': '${firebaseUser.uid}'
+        }).then((doc) {
+          print('inscrição realizada >> ' + '$doc');
+          String idInscricaoEvento = doc.documentID;
+
+          // salva no arquivo
+          Map<String, dynamic> _dados = Map();
+          _dados[firebaseUser.uid] = {
+            "eventos": [
+              {
+                "evento_code": _eventoStore.evento.code,
+                "evento_id": _eventoStore.evento.id,
+                "inscricao_evento_id": idInscricaoEvento,
+                "inscricao_atividades": [{}]
+              }
+            ]
+          };
+          print('Salvando dados no arquivo >> ${_dados.toString()}');
+
+          // carrega arquivo no store
+          // _eventoStore.setArquivoDados(_);
+        }).catchError((error) {
+          print('erro ao realizar inscrição >> ' + '$error');
+        });
+      }
+      _eventoStore.setDesejaInscreverSe(false);
 
       onSuccess();
       isLoading = false;
