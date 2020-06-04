@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +10,16 @@ import 'package:my_event/repositories/inscricao_repository.dart';
 import 'package:my_event/stores/evento_store.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'arquivo_dados_repository.dart';
+
 class UserRepository extends Model {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   final _eventoStore = GetIt.instance<EventoStore>();
+  final _arquivoDadosRepository = new ArquivoDadosRepository();
+
+  List _arquivo = [];
+  Map<String, dynamic> _dados;
 
   FirebaseUser firebaseUser;
   // UserModel userData;
@@ -194,5 +203,46 @@ class UserRepository extends Model {
     }
 
     notifyListeners();
+  }
+
+  void inscreverSeNoEventoAtual(
+      {@required VoidCallback onSuccess, @required VoidCallback onFail}) async {
+    Firestore.instance.collection('inscricoes_evento').add({
+      'evento_id': '${_eventoStore.evento.id}',
+      'user_id': '${firebaseUser.uid}'
+    }).then((doc) {
+      print('inscrição realizada >> ' + '$doc');
+      String idInscricaoEvento = doc.documentID;
+
+      // getArquivo, editArquivo e saveArquivo
+      Map<String, dynamic> _dados_p = Map();
+      _dados_p = {
+        "eventos": [
+          {
+            "evento_code": _eventoStore.evento.code,
+            "evento_id": _eventoStore.evento.id,
+            "inscricao_evento_id": idInscricaoEvento,
+            "inscricao_atividades": [{}]
+          }
+        ]
+      };
+      _salvarDadosUserNoArquivoENoEventoStore(_dados_p);
+    }).catchError((error) {
+      print('erro ao realizar inscrição >> ' + '$error');
+    });
+  }
+
+  void _salvarDadosUserNoArquivoENoEventoStore(Map<String, dynamic> _dados_p) {
+    _arquivoDadosRepository.readData().then((arquive) {
+      _arquivo = json.decode(arquive);
+      _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
+
+      _dados[firebaseUser.uid] = _dados_p;
+      _arquivo.add(_dados);
+      _eventoStore.setArquivoDados(_dados);
+
+      // salva arquivo no celular
+      _arquivoDadosRepository.saveData2(_arquivo);
+    });
   }
 }

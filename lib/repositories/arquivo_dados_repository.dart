@@ -40,7 +40,7 @@ class ArquivoDadosRepository {
       _arquivo.clear();
 
       // salva arquivo no celular
-      saveData();
+      saveData2(_arquivo);
     });
   }
 
@@ -106,8 +106,15 @@ class ArquivoDadosRepository {
     return File("${directory.path}/data.json");
   }
 
-  Future<File> saveData() async {
-    String data = json.encode(_arquivo);
+  // Future<File> saveData() async {
+  //   String data = json.encode(_arquivo);
+
+  //   final file = await _getFile();
+  //   return file.writeAsString(data);
+  // }
+
+  Future<File> saveData2(List arquivo_p) async {
+    String data = json.encode(arquivo_p);
 
     final file = await _getFile();
     return file.writeAsString(data);

@@ -232,7 +232,6 @@ class InformacoesTab extends StatelessWidget {
                                         onPressed: () {
                                           if (UserRepository.of(context)
                                               .isLoggedIn()) {
-                                            
                                             if (_eventoStore
                                                 .inscritoNoEventoAtual(
                                                     UserRepository.of(context)
@@ -240,9 +239,10 @@ class InformacoesTab extends StatelessWidget {
                                                         .uid)) {
                                               print('removendo inscrição....');
                                             }
-
-                                            print('fazendo inscrição no evento...');
-
+                                            UserRepository.of(context)
+                                                .inscreverSeNoEventoAtual(
+                                                    onSuccess: _onSuccess,
+                                                    onFail: _onFail);
                                           } else {
                                             // Seta que ele esta logando porque deseja se increver
                                             _eventoStore
@@ -297,19 +297,19 @@ class InformacoesTab extends StatelessWidget {
     );
   }
 
-  // void _onSuccess() {
-  //   scaffoldKey.currentState.showSnackBar(SnackBar(
-  //     content: Text('Inscrição no evento realizada sucesso!'),
-  //     backgroundColor: Colors.green[500],
-  //     duration: Duration(seconds: 2),
-  //   ));
-  // }
+  void _onSuccess() {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Inscrição no evento realizada sucesso!'),
+      backgroundColor: Colors.green[500],
+      duration: Duration(seconds: 2),
+    ));
+  }
 
-  // void _onFail() {
-  //   scaffoldKey.currentState.showSnackBar(SnackBar(
-  //     content: Text('Falha ao realizar inscrição no evento!'),
-  //     backgroundColor: Colors.redAccent,
-  //     duration: Duration(seconds: 2),
-  //   ));
-  // }
+  void _onFail() {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Falha ao realizar inscrição no evento!'),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
 }
