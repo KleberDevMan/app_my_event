@@ -27,65 +27,15 @@ class _CodeEventState extends State<CodeView> {
 
   var model = new EventoViewModel();
 
-  final _arquivoDadosRepository = new ArquivoDadosRepository();
+  // final _arquivoDadosRepository = new ArquivoDadosRepository();
 
-  String version = '...';
+  String version = '1.0.1';
 
   List _arquivo = [];
   Map<String, dynamic> _dados;
 
-  // _verificaCodigoJaExiste() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   print('código salvo >> ${prefs.getString('codigo')}');
-  //   model.codigo = prefs.getString('codigo') ?? '';
-
-  //   if (!model.codigo.isEmpty) {
-  //     _controller.buscaEventoPorCodigo(model).then((evento) {
-  //       if (evento != null) {
-  //         // busca os dias do evento retornado
-  //         _controller.setDias(evento).then((value) {
-  //           if (value != null) {
-  //             // deu certo. conseguiu buscar a programacao
-  //             _eventoStore.setEvento(value);
-  //             model.busy = false;
-  //             setState(() {});
-  //             Navigator.of(context).pushReplacement(
-  //                 MaterialPageRoute(builder: (context) => HomeView()));
-
-  //             // Navigator.push(
-  //             //   context,
-  //             //   MaterialPageRoute(
-  //             //     builder: (context) => HomeView(),
-  //             //   ),
-  //             // );
-  //           } else {
-  //             // erro no momento de carregar programacao
-  //             model.error = true;
-  //             model.msg_erro = 'Erro ao carregar programação';
-  //             model.busy = false;
-  //             setState(() {});
-  //           }
-  //         });
-  //       } else {
-  //         model.busy = false;
-  //         setState(() {});
-  //       }
-  //     });
-  //   } else {
-  //     model.busy = false;
-  //     setState(() {});
-  //   }
-  // }
-
-  // _savarCodigoSharedPreferences(String codigo) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('codigo', codigo);
-  //   print('código setado >> ${prefs.getString('codigo')}');
-  // }
-
   _savarCodigoArquivo(String codigo) async {
-    _arquivoDadosRepository.readData().then((arquive) {
+    _readData().then((arquive) {
       _arquivo = json.decode(arquive);
       _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
 
@@ -102,7 +52,7 @@ class _CodeEventState extends State<CodeView> {
   }
 
   _apagarDadosArquivo() async {
-    _arquivoDadosRepository.readData().then((arquive) {
+    _readData().then((arquive) {
       _arquivo = json.decode(arquive);
 
       _arquivo.clear();
@@ -164,7 +114,8 @@ class _CodeEventState extends State<CodeView> {
 
   _verificaCodigoJaExisteNoArquivo2() async {
     model.busy = true;
-    _arquivoDadosRepository.readData().then((arquive) {
+    
+    _readData().then((arquive) {
       _arquivo = json.decode(arquive);
       _dados = _arquivo != null ? _arquivo.length > 0 ? _arquivo[0] : {} : {};
 
@@ -211,6 +162,8 @@ class _CodeEventState extends State<CodeView> {
         }
       }
     });
+  
+    model.busy = false;
   }
 
   @override
@@ -220,14 +173,11 @@ class _CodeEventState extends State<CodeView> {
     _verificaCodigoJaExisteNoArquivo2();
 
     // busca versao atual do app
-    _controller.version().then((value) {
-      setState(() {
-        version = value;
-      });
-    });
-
-    // // limpar code sharedPreferences
-    // _savarCodigoSharedPreferences('');
+    // _controller.version().then((value) {
+    //   setState(() {
+    //     version = value;
+    //   });
+    // });
 
     // limpar arquivo
     // _apagarDadosArquivo();

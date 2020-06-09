@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -132,8 +133,10 @@ class InformacoesTab extends StatelessWidget {
                       height: 5,
                     ),
                     Row(children: <Widget>[
+                      //data e local
                       Column(
                         children: <Widget>[
+                          //data
                           Row(children: <Widget>[
                             Icon(
                               Icons.calendar_today,
@@ -149,6 +152,7 @@ class InformacoesTab extends StatelessWidget {
                           SizedBox(
                             height: 5,
                           ),
+                          //local
                           Row(children: <Widget>[
                             Icon(
                               Icons.location_on,
@@ -164,102 +168,141 @@ class InformacoesTab extends StatelessWidget {
                         ],
                       ),
 
-                      // Column(children: <Widget>[
+                      // botao
                       Expanded(
-                        child: Observer(builder: (context) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 30, right: 10),
+                        // child: Observer(builder: (context) {
+                        //   return Padding(
+                        //     padding: EdgeInsets.only(left: 30, right: 10),
+                        //     child: _eventoStore.desejaInscreverSe
+                        //         ? Center(
+                        //             child: CircularProgressIndicator(),
+                        //           )
+                        //         :
+                        //         // Text('kleber'),
 
-                            child:
+                        //         RaisedButton(
+                        //             child:
 
-                                // ScopedModelDescendant<InscricaoRepository>(
-                                //     builder: (context, child, model) {
+                        //             Row(
+                        //               children: <Widget>[
+                        //                 Icon(
+                        //                   UserRepository.of(context)
+                        //                           .isLoggedIn()
+                        //                       ? _eventoStore
+                        //                               .inscritoNoEventoAtual(
+                        //                                   UserRepository.of(
+                        //                                           context)
+                        //                                       .firebaseUser
+                        //                                       .uid)
+                        //                           ? Icons.delete
+                        //                           : Icons.add
+                        //                       : Icons.add,
+                        //                   color: Colors.white,
+                        //                   size: 20.0,
+                        //                 ),
+                        //                 SizedBox(
+                        //                   width: 10,
+                        //                 ),
+                        //                 Text(
+                        //                   UserRepository.of(context)
+                        //                           .isLoggedIn()
+                        //                       ? _eventoStore
+                        //                               .inscritoNoEventoAtual(
+                        //                                   UserRepository.of(
+                        //                                           context)
+                        //                                       .firebaseUser
+                        //                                       .uid)
+                        //                           ? 'Desinscrever-se'
+                        //                           : 'Inscrever-se'
+                        //                       : 'Inscrever-se',
+                        //                   style: TextStyle(
+                        //                       fontSize: 18,
+                        //                       color: Colors.white),
+                        //                 ),
+                        //               ],
+                        //             ),
 
-                                _eventoStore.desejaInscreverSe
-                                    ? Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : RaisedButton(
-                                        child: Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              UserRepository.of(context)
-                                                      .isLoggedIn()
-                                                  ? _eventoStore
-                                                          .inscritoNoEventoAtual(
-                                                              UserRepository.of(
-                                                                      context)
-                                                                  .firebaseUser
-                                                                  .uid)
-                                                      ? Icons.delete
-                                                      : Icons.add
-                                                  : Icons.add,
-                                              color: Colors.white,
-                                              size: 20.0,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              UserRepository.of(context)
-                                                      .isLoggedIn()
-                                                  ? _eventoStore
-                                                          .inscritoNoEventoAtual(
-                                                              UserRepository.of(
-                                                                      context)
-                                                                  .firebaseUser
-                                                                  .uid)
-                                                      ? 'Desinscrever-se'
-                                                      : 'Inscrever-se'
-                                                  : 'Inscrever-se',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        color: UserRepository.of(context)
-                                                .isLoggedIn()
-                                            ? _eventoStore
-                                                    .inscritoNoEventoAtual(
-                                                        UserRepository.of(
-                                                                context)
-                                                            .firebaseUser
-                                                            .uid)
-                                                ? Colors.redAccent
-                                                : Colors.green[800]
-                                            : Colors.green[800],
-                                        onPressed: () {
-                                          if (UserRepository.of(context)
-                                              .isLoggedIn()) {
-                                            if (_eventoStore
-                                                .inscritoNoEventoAtual(
-                                                    UserRepository.of(context)
-                                                        .firebaseUser
-                                                        .uid)) {
-                                              print('removendo inscrição....');
-                                            }
-                                            UserRepository.of(context)
-                                                .inscreverSeNoEventoAtual(
-                                                    onSuccess: _onSuccess,
-                                                    onFail: _onFail);
-                                          } else {
-                                            // Seta que ele esta logando porque deseja se increver
-                                            _eventoStore
-                                                .setDesejaInscreverSe(true);
+                        //             color: UserRepository.of(context)
+                        //                     .isLoggedIn()
+                        //                 ? _eventoStore.inscritoNoEventoAtual(
+                        //                         UserRepository.of(context)
+                        //                             .firebaseUser
+                        //                             .uid)
+                        //                     ? Colors.redAccent
+                        //                     : Colors.green[800]
+                        //                 : Colors.green[800],
 
-                                            // Entre para se inscrever
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LoginView()));
-                                          }
-                                        },
-                                      ),
+                        //             onPressed: () {
+                        //               if (UserRepository.of(context)
+                        //                   .isLoggedIn()) {
+                        //                 if (_eventoStore.inscritoNoEventoAtual(
+                        //                     UserRepository.of(context)
+                        //                         .firebaseUser
+                        //                         .uid)) {
+                        //                   print('removendo inscrição....');
+                        //                 }
+                        //                 UserRepository.of(context)
+                        //                     .inscreverSeNoEventoAtual(
+                        //                         onSuccess: _onSuccess,
+                        //                         onFail: _onFail);
+                        //               } else {
+                        //                 // Seta que ele esta logando porque deseja se increver
+                        //                 _eventoStore.setDesejaInscreverSe(true);
 
-                            // }),
-                          );
-                        }),
+                        //                 // Entre para se inscrever
+                        //                 Navigator.of(context).push(
+                        //                     MaterialPageRoute(
+                        //                         builder: (context) =>
+                        //                             LoginView()));
+                        //               }
+                        //             },
+                        //           ),
+
+                        //   );
+                        // }),
+
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30, right: 10),
+                          child: RaisedButton(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 20.0,
+                                ),
+                                // SizedBox(
+                                //   width: 10,
+                                // ),
+                                Expanded(
+                                  child: Text(
+                                    'Inscrever-se',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            color: Colors.green[800],
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => new AlertDialog(
+                                        title: new Text(""),
+                                        content: new Text("Em breve."),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('Ok'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ));
+                            },
+                          ),
+                        ),
                       )
 
                       // ]),
@@ -311,5 +354,39 @@ class InformacoesTab extends StatelessWidget {
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),
     ));
+  }
+
+  _showMaterialDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text("Material Dialog"),
+              content: new Text("Hey! I'm Coflutter!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
+
+  _showCupertinoDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => new CupertinoAlertDialog(
+              title: new Text("Cupertino Dialog"),
+              content: new Text("Hey! I'm Coflutter!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 }

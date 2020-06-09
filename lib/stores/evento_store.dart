@@ -21,11 +21,12 @@ abstract class _EventoStoreBase with Store {
 
     if (!user_id.isEmpty && user_id != null) {
       Map<String, dynamic> dados_user = dados[user_id];
-      
-      if(dados_user != null){
-        resultado = !dados_user['inscricao_evento_id'].isEmpty;
-      }
 
+      if (dados_user != null) {
+        if (dados_user['inscricao_evento_id'] != null) {
+          resultado = !dados_user['inscricao_evento_id'].isEmpty;
+        }
+      }
     }
 
     return resultado;

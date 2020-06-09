@@ -72,7 +72,10 @@ class _HomeViewState extends State<HomeView> {
             title: AnimatedBuilder(
                 animation: _pageController,
                 builder: (_, __) {
-                  return Text(['Informações', 'Programação${InscricaoRepository.of(context).idInscricaoEvento}'][_page]);
+                  return Text([
+                    'Informações',
+                    'Programação${InscricaoRepository.of(context).idInscricaoEvento}'
+                  ][_page]);
                 }),
             centerTitle: true,
             actions: <Widget>[
@@ -96,7 +99,22 @@ class _HomeViewState extends State<HomeView> {
                   : Padding(
                       padding: EdgeInsets.only(right: 20.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => new AlertDialog(
+                                    title: new Text(""),
+                                    content: new Text("Em breve."),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                        },
                         child: Icon(
                           Icons.tune,
                           size: 26.0,
